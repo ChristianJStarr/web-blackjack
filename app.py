@@ -24,13 +24,6 @@ def game(game_id):
 
     return render_template('game.html', game_id=game_id)
 
-@app.route('/preview/<game_id>')
-def preview(game_id):
-    game = game_manager.get_game(game_id)
-    game_state = game.get_game_state()
-    return render_template('preview.html', game_state=game_state)
-
-
 @socketio.on('disconnect')
 def disconnect():
     player, game = game_manager.get_session(request.sid)
