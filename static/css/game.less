@@ -1,0 +1,302 @@
+@import (reference) 'variables';
+
+
+.table {
+  max-width: 1600px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr min-content 1fr 1fr;
+  grid-template-areas:
+          ". dealer ."
+          "message message message"
+          "seats seats seats"
+          ". bank actions";
+  gap: @padding-md;
+  padding: @padding-md;
+  width:100%;
+  aspect-ratio: 1.6;
+  background: darkolivegreen;
+  * {
+    user-select: none;
+  }
+}
+
+.dealer, .bank, .actions {
+  overflow: hidden;
+}
+
+
+
+.card {
+
+  width: @card-width;
+  height: @card-height;
+  overflow: hidden;
+  max-width: unset;
+  svg {
+      width: @card-width;
+      height: @card-height;
+      overflow: hidden;
+      max-width: unset;
+  }
+}
+
+.chip {
+  background-image: var(--image);
+  background-size: contain;
+  background-position: center;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  border-radius: 50%;
+
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  &.-copy {
+    position: absolute;
+    display: block;
+  }
+}
+
+.chip-group {
+  position: relative;
+  .chip {
+    position: absolute;
+    right:0; left: 0;
+    top: 0;
+    &:not(:first-child) {
+      box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.62);
+    }
+  }
+}
+
+
+
+
+.dealer {
+  grid-area: dealer;
+  border: solid @border-width darkorange;
+  width: 100%;
+  align-self: center;
+
+  &__cards {
+    display: flex;
+    flex-direction: row-reverse;
+    font-size: 0.75em;
+    min-height: @card-height;
+
+    .card {
+    }
+  }
+}
+
+.bank {
+  grid-area: bank;
+  display: flex;
+  align-self: center;
+  padding: 8px 0 5px 0;
+  border: solid @border-width white;
+  border-radius: 5px;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+  &__chips {
+    flex: 1 0 100%;
+    display: flex;
+    justify-content: space-evenly;
+    font-size: 4em;
+  }
+  &__text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 1 45%;
+    gap: 5px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 10px;
+    margin: 0;
+    span {
+      font-size: 1.4em;
+    }
+  }
+  &__balance {
+    font-weight: bold;
+    color: white;
+    font-size: @font-size-sm;
+  }
+}
+
+.seats {
+  display: flex;
+  flex-direction: row;
+  grid-area: seats;
+  justify-content: space-evenly;
+  align-items: center;
+
+  .seat {
+    width: calc(10% - @border-width - @border-width);
+    aspect-ratio: 1;
+    background-color: rgba(255,255,255,0.2);
+    border: solid @border-width white;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: auto;
+
+    &.-active {
+      border: solid @border-width gold;
+    }
+
+    &__bet {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+      z-index: 2;
+    }
+    &__bet-text {
+      height: 0;
+      position: absolute;
+      bottom: -1.5vw;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+      font-size: 1.2em;
+      right: 0;left: 0;
+    }
+    &__player {
+      position: absolute;
+      height: 0;
+      bottom: -0.25vw;
+      text-align: center;
+      color: white;
+      right: 0;left: 0;
+      font-weight: bold;
+    }
+    &__cards {
+      position: absolute;
+      bottom: 100%;
+      flex-direction: column-reverse;
+      order: -1;
+      display: flex;
+      z-index: 1;
+      overflow:visible;
+      right:0;left:0;
+      .card {
+        &:nth-child(2) {
+          transform: translate3d(calc((@card-width * 1) * @card-offset-x), calc((@card-height * 1) * @card-offset-y), 0);
+        }
+        &:nth-child(3) {
+          transform: translate3d(calc((@card-width * 2) * @card-offset-x), calc((@card-height * 2) * @card-offset-y), 0);
+        }
+        &:nth-child(4) {
+          transform: translate3d(calc((@card-width * 3) * @card-offset-x), calc((@card-height * 3) * @card-offset-y), 0);
+        }
+        &:nth-child(5) {
+          transform: translate3d(calc((@card-width * 4) * @card-offset-x), calc((@card-height * 4) * @card-offset-y), 0);
+        }
+        &:nth-child(6) {
+          transform: translate3d(calc((@card-width * 5) * @card-offset-x), calc((@card-height * 5) * @card-offset-y), 0);
+        }
+        &:nth-child(7) {
+          transform: translate3d(calc((@card-width * 6) * @card-offset-x), calc((@card-height * 6) * @card-offset-y), 0);
+        }
+        &:nth-child(8) {
+          transform: translate3d(calc((@card-width * 7) * @card-offset-x), calc((@card-height * 7) * @card-offset-y), 0);
+        }
+        &:nth-child(9) {
+          transform: translate3d(calc((@card-width * 8) * @card-offset-x), calc((@card-height * 8) * @card-offset-y), 0);
+        }
+        &:nth-child(10) {
+          transform: translate3d(calc((@card-width * 9) * @card-offset-x), calc((@card-height * 9) * @card-offset-y), 0);
+        }
+        &:nth-child(11) {
+          transform: translate3d(calc((@card-width * 10) * @card-offset-x), calc((@card-height * 10) * @card-offset-y), 0);
+        }
+        &:nth-child(12) {
+          transform: translate3d(calc((@card-width * 12) * @card-offset-x), calc((@card-height * 11) * @card-offset-y), 0);
+        }
+      }
+    }
+  }
+}
+
+.shoe {
+  position: relative;
+  grid-column: 5;
+  grid-row: 1;
+
+  &__container {
+    position: absolute;
+    border: solid @border-width black;
+    border-radius: 5px;
+    aspect-ratio: 3;
+    width: 100px;
+    transform: rotate(15deg);
+    top: 0; right: 0;
+  }
+}
+
+.actions {
+  grid-area: actions;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
+  align-content: center;
+
+  .action {
+    flex: 1 0 40%;
+    outline: none;
+    appearance: none;
+    border: solid @border-width white;
+    background-color: rgba(255,255,255,0.25);
+    border-radius: @border-radius;
+    font-size: @font-size-sm;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: @padding;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(200,200,200,0.25);
+      transform: scale(1.05);
+    }
+  }
+
+}
+
+.message {
+  grid-area: message;
+  display: block;
+  text-align: center;
+  color: white;
+  font-size: @font-size-md;
+  font-weight: bold;
+  height: @font-size-md;
+}
+
+
+@media (max-width: 1100px) {
+  .table {
+    grid-template-areas:
+          ". dealer ."
+          "message message message"
+          "seats seats seats"
+          "bank bank bank"
+          "actions actions actions";
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr min-content 1fr 1fr 1fr;
+  }
+}

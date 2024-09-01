@@ -1,0 +1,264 @@
+.table {
+  max-width: 1600px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr min-content 1fr 1fr;
+  grid-template-areas: ". dealer ." "message message message" "seats seats seats" ". bank actions";
+  gap: calc(calc(clamp(500px, 100vw, 1600px) / 100) * 2);
+  padding: calc(calc(clamp(500px, 100vw, 1600px) / 100) * 2);
+  width: 100%;
+  aspect-ratio: 1.6;
+  background: darkolivegreen;
+}
+.table * {
+  user-select: none;
+}
+.dealer,
+.bank,
+.actions {
+  overflow: hidden;
+}
+.card {
+  width: calc(calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 0.7159);
+  height: calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7);
+  overflow: hidden;
+  max-width: unset;
+}
+.card svg {
+  width: calc(calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 0.7159);
+  height: calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7);
+  overflow: hidden;
+  max-width: unset;
+}
+.chip {
+  background-image: var(--image);
+  background-size: contain;
+  background-position: center;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+.chip svg {
+  width: 100%;
+  height: 100%;
+}
+.chip.-copy {
+  position: absolute;
+  display: block;
+}
+.chip-group {
+  position: relative;
+}
+.chip-group .chip {
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 0;
+}
+.chip-group .chip:not(:first-child) {
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.62);
+}
+.dealer {
+  grid-area: dealer;
+  border: solid calc(calc(clamp(500px, 100vw, 1600px) / 100) * 0.2) darkorange;
+  width: 100%;
+  align-self: center;
+}
+.dealer__cards {
+  display: flex;
+  flex-direction: row-reverse;
+  font-size: 0.75em;
+  min-height: calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7);
+}
+.bank {
+  grid-area: bank;
+  display: flex;
+  align-self: center;
+  padding: 8px 0 5px 0;
+  border: solid calc(calc(clamp(500px, 100vw, 1600px) / 100) * 0.2) white;
+  border-radius: 5px;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.bank__chips {
+  flex: 1 0 100%;
+  display: flex;
+  justify-content: space-evenly;
+  font-size: 4em;
+}
+.bank__text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 1 45%;
+  gap: 5px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  padding-top: 10px;
+  margin: 0;
+}
+.bank__text span {
+  font-size: 1.4em;
+}
+.bank__balance {
+  font-weight: bold;
+  color: white;
+  font-size: calc(calc(clamp(500px, 100vw, 1600px) / 100) * 2);
+}
+.seats {
+  display: flex;
+  flex-direction: row;
+  grid-area: seats;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.seats .seat {
+  width: calc(10% - calc(calc(clamp(500px, 100vw, 1600px) / 100) * 0.2) - calc(calc(clamp(500px, 100vw, 1600px) / 100) * 0.2));
+  aspect-ratio: 1;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: solid calc(calc(clamp(500px, 100vw, 1600px) / 100) * 0.2) white;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: auto;
+}
+.seats .seat.-active {
+  border: solid calc(calc(clamp(500px, 100vw, 1600px) / 100) * 0.2) gold;
+}
+.seats .seat__bet {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  z-index: 2;
+}
+.seats .seat__bet-text {
+  height: 0;
+  position: absolute;
+  bottom: -1.5vw;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.2em;
+  right: 0;
+  left: 0;
+}
+.seats .seat__player {
+  position: absolute;
+  height: 0;
+  bottom: -0.25vw;
+  text-align: center;
+  color: white;
+  right: 0;
+  left: 0;
+  font-weight: bold;
+}
+.seats .seat__cards {
+  position: absolute;
+  bottom: 100%;
+  flex-direction: column-reverse;
+  order: -1;
+  display: flex;
+  z-index: 1;
+  overflow: visible;
+  right: 0;
+  left: 0;
+}
+.seats .seat__cards .card:nth-child(2) {
+  transform: translate3d(calc((calc(calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 0.7159) * 1) * 0.4), calc((calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 1) * 0.75), 0);
+}
+.seats .seat__cards .card:nth-child(3) {
+  transform: translate3d(calc((calc(calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 0.7159) * 2) * 0.4), calc((calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 2) * 0.75), 0);
+}
+.seats .seat__cards .card:nth-child(4) {
+  transform: translate3d(calc((calc(calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 0.7159) * 3) * 0.4), calc((calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 3) * 0.75), 0);
+}
+.seats .seat__cards .card:nth-child(5) {
+  transform: translate3d(calc((calc(calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 0.7159) * 4) * 0.4), calc((calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 4) * 0.75), 0);
+}
+.seats .seat__cards .card:nth-child(6) {
+  transform: translate3d(calc((calc(calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 0.7159) * 5) * 0.4), calc((calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 5) * 0.75), 0);
+}
+.seats .seat__cards .card:nth-child(7) {
+  transform: translate3d(calc((calc(calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 0.7159) * 6) * 0.4), calc((calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 6) * 0.75), 0);
+}
+.seats .seat__cards .card:nth-child(8) {
+  transform: translate3d(calc((calc(calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 0.7159) * 7) * 0.4), calc((calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 7) * 0.75), 0);
+}
+.seats .seat__cards .card:nth-child(9) {
+  transform: translate3d(calc((calc(calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 0.7159) * 8) * 0.4), calc((calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 8) * 0.75), 0);
+}
+.seats .seat__cards .card:nth-child(10) {
+  transform: translate3d(calc((calc(calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 0.7159) * 9) * 0.4), calc((calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 9) * 0.75), 0);
+}
+.seats .seat__cards .card:nth-child(11) {
+  transform: translate3d(calc((calc(calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 0.7159) * 10) * 0.4), calc((calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 10) * 0.75), 0);
+}
+.seats .seat__cards .card:nth-child(12) {
+  transform: translate3d(calc((calc(calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 0.7159) * 12) * 0.4), calc((calc(calc(clamp(500px, 100vw, 1600px) / 100) * 7) * 11) * 0.75), 0);
+}
+.shoe {
+  position: relative;
+  grid-column: 5;
+  grid-row: 1;
+}
+.shoe__container {
+  position: absolute;
+  border: solid calc(calc(clamp(500px, 100vw, 1600px) / 100) * 0.2) black;
+  border-radius: 5px;
+  aspect-ratio: 3;
+  width: 100px;
+  transform: rotate(15deg);
+  top: 0;
+  right: 0;
+}
+.actions {
+  grid-area: actions;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
+  align-content: center;
+}
+.actions .action {
+  flex: 1 0 40%;
+  outline: none;
+  appearance: none;
+  border: solid calc(calc(clamp(500px, 100vw, 1600px) / 100) * 0.2) white;
+  background-color: rgba(255, 255, 255, 0.25);
+  border-radius: calc(clamp(500px, 100vw, 1600px) / 100);
+  font-size: calc(calc(clamp(500px, 100vw, 1600px) / 100) * 2);
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: calc(clamp(500px, 100vw, 1600px) / 100);
+  color: white;
+  cursor: pointer;
+}
+.actions .action:hover {
+  background-color: rgba(200, 200, 200, 0.25);
+  transform: scale(1.05);
+}
+.message {
+  grid-area: message;
+  display: block;
+  text-align: center;
+  color: white;
+  font-size: calc(calc(clamp(500px, 100vw, 1600px) / 100) * 4);
+  font-weight: bold;
+  height: calc(calc(clamp(500px, 100vw, 1600px) / 100) * 4);
+}
+@media (max-width: 1100px) {
+  .table {
+    grid-template-areas: ". dealer ." "message message message" "seats seats seats" "bank bank bank" "actions actions actions";
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr min-content 1fr 1fr 1fr;
+  }
+}
+/*# sourceMappingURL=game.css.map */

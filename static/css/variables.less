@@ -1,0 +1,15 @@
+@u: calc(clamp(500px, 100vw,1600px) / 100);
+
+@border-width: calc(@u * 0.2);
+@border-radius: @u;
+@font-size-sm: calc(@u * 2);
+@font-size-md: calc(@u * 4);
+@padding: @u;
+@padding-md: calc(@u * 2);
+@padding-lg: calc(@u * 5);
+
+@card-aspect: 0.7159;
+@card-height: calc(@u * 7);
+@card-width: calc(@card-height * @card-aspect);
+@card-offset-x: 0.40;
+@card-offset-y: 0.75;

@@ -1,0 +1,40 @@
+@import (reference) 'variables';
+
+@import 'reset';
+
+body {
+  display: block;
+  background-color: #34441b;
+}
+
+header {
+  max-width: 1600px;
+  margin: 0 auto;
+  background-color: #34441b;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h1 {
+    color: white;
+    margin: 0;
+    padding: 0;
+  }
+
+  .copy-link, .create-link{
+    padding: 5px;
+    color: white;
+    border: solid 2px white;
+    text-align: center;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    svg {
+      width: 1em;
+      height: 1em;
+    }
+  }
+}
