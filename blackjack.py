@@ -111,16 +111,17 @@ class BlackJackDealer:
         return {
             'up_card': self.up_card,
             'down_card': self.down_card if self.turned or self.down_card == None else self.DOWN_CARD,
-            'cards': self.cards[2:]
+            'cards': self.cards
         }
 
 class BlackJackGame:
     BET_TIME = 5
 
-    def __init__(self, game_id, message_fn, seat_count=6):
+    def __init__(self, game_id, message_fn, sleep_fn, seat_count=6):
         self.id = game_id
         self.seat_count = seat_count
         self.message_fn = message_fn
+        self.sleep_fn = sleep_fn
         self.deck = BlackJackDeck()
         self.dealer = BlackJackDealer()
         self.seats = [BlackJackSeat(seat) for seat in range(1, seat_count+1)]
@@ -133,29 +134,39 @@ class BlackJackGame:
     ## Game Loop
     ##--------------------------
     def bump(self):
+        print('bumping game')
         if not self.loop_running:
             self.game_loop()
     def game_loop(self):
+        print('game loop started')
         self.loop_running = True
         while self.player_count():
             self.deck.check_deck()
-
+            print('1')
             self.clear()
+            print('2')
 
             self.wait_for_bets()
+            print('3')
 
             self.initial_deal()
+            print('4')
 
             self.wait_for_dealers_turn()
+            print('5')
 
-            time.sleep(2)
+            self.sleep(2)
+            print('6')
 
             self.dealers_turn()
+            print('7')
 
             self.end_round()
+            print('8')
 
 
         self.loop_running = False
+        print('Game Loop Stopped')
 
 
     ##--------------------------
@@ -170,21 +181,21 @@ class BlackJackGame:
     def initial_deal(self):
         self.dealer.initial_deal(self.deck.deal_card(), self.deck.deal_card())
         self.state_updated()
-        time.sleep(1)
+        self.sleep(1)
         for seat in self.seats:
             if seat.player and seat.bet:
                 seat.cards = [self.deck.deal_card(), self.deck.deal_card()]
                 self.state_updated()
-                time.sleep(1)
+                self.sleep(1)
         self.next_turn()
         self.state_updated()
     def dealers_turn(self):
         self.dealer.turned = True
         self.state_updated()
-        time.sleep(1)
+        self.sleep(1)
         while self.dealer.hand_value < 17:
             self.dealer.cards.append(self.deck.deal_card())
-            time.sleep(1)
+            self.sleep(1)
             self.state_updated()
     def end_round(self):
         dealer_value = self.dealer.hand_value
@@ -212,6 +223,7 @@ class BlackJackGame:
     ## Flow - Methods
     ##--------------------------
     def add_player(self, player, role):
+        print('adding player')
         seat_id = None
         error = ''
         for seat in self.seats:
@@ -308,6 +320,7 @@ class BlackJackGame:
     ## Methods
     ##--------------------------
     def player_count(self):
+        print('count')
         return sum([1 if seat.player else 0 for seat in self.seats])
     def get_next_turn(self):
         turn = self.seat_count + 1
@@ -337,28 +350,40 @@ class BlackJackGame:
         for x in range(1, self.BET_TIME + 1):
             if sum([1 if seat.bet else 0 for seat in self.seats]) == self.player_count():
                 return
-            time.sleep(1)
+            print('bets waiting', self.id)
+            self.sleep(1)
         while sum([1 if seat.bet else 0 for seat in self.seats]) == 0:
-            time.sleep(1)
+            print('bets waiting', self.id)
+            self.sleep(1)
     def wait_for_dealers_turn(self):
+        print('dealer turn', self.turn)
+        print('dealer seat_count', self.seat_count)
         while self.turn != self.seat_count + 1:
-            time.sleep(1)
+            print('dealer waiting', self.id)
+            self.sleep(1)
 
 
     ##--------------------------
     ## Messaging
     ##--------------------------
     def state_updated(self):
+        print(f'Sending game_state with ID: {self.id}')
+        print(f'State: {self.state}')
         self.message('game_state', self.state, self.id)
     def round_result(self, player, result):
         self.message('round_result', result, player.sid)
     def player_bust(self, player):
         self.message('player_bust', player.state, player.sid)
+
+
     def message(self, key, data, to):
         if self.message_fn:
             self.message_fn(key, data, to)
 
 
+    def sleep(self, seconds):
+        if self.sleep_fn:
+            self.sleep_fn(seconds)
 
     @property
     def state(self):
@@ -366,7 +391,8 @@ class BlackJackGame:
             'seats': [seat.state for seat in self.seats],
             'dealer': self.dealer.state,
             'turn': self.turn,
-            'actions': self.actions
+            'actions': self.actions,
+            'chips': [1,5,25,50,100,500]
         }
 
 class BlackJackGameManager:
@@ -374,8 +400,8 @@ class BlackJackGameManager:
         self.games = {}
         self.players = {}
 
-    def create_game(self, game_id, message_fn):
-        game = BlackJackGame(game_id, message_fn)
+    def create_game(self, game_id, message_fn, sleep_fn):
+        game = BlackJackGame(game_id, message_fn, sleep_fn)
         self.games[game_id] = game
         return game
 

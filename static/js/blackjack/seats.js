@@ -4,10 +4,11 @@ import {createElement} from "./utility.js";
 export class Seats {
 
     constructor(table, count=6) {
+        this.table = table;
         this.node = createElement('div', 'seats');
 
         this.seats = Object.fromEntries(Array.from({ length: count },
-            (_, id) => [id, new Seat(id)]
+            (_, id) => [id, new Seat(table, id)]
         ));
 
         for (const seat of Object.values(this.seats)) {
@@ -21,7 +22,7 @@ export class Seats {
         for (const seat_state of seats_state) {
             const seat_id = seat_state.id;
             if (seat_id) {
-                for (const seat of this.seats) {
+                for (const seat of Object.values(this.seats)) {
                     if (seat.id === seat_id) {
                         seat.update({ active: seat_id === active_seat, ...seat_state });
                     }

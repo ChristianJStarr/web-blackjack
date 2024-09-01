@@ -34,13 +34,14 @@ export class Game {
         this.socket.emit('disconnect');
     }
     joinGame() {
-        this.socket.emit({
+        this.socket.emit('join_game',{
             game_id: this.id,
             player_id: this.player_id,
             role: this.role
         })
     }
     action(action, data=null) {
+        console.log(`action: ${action}`, data);
         this.socket.emit(action, data ? data : {});
     }
 

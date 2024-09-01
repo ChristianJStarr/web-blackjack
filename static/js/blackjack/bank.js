@@ -43,10 +43,10 @@ export class Bank {
             for (const chip_value of chips) {
                 const chip_object = new Chip(chip_value);
 
-                chip.node.onclick = event => {
+                chip_object.node.onclick = event => {
                     this.table.action('player_bet', { amount: chip_value });
                 }
-                this.chips[chip_value] = chip;
+                this.chips[chip_value] = chip_object;
                 this.chips_node.append(chip_object.node)
             }
         }

@@ -6,6 +6,7 @@ export class Dealer {
     constructor(table) {
         this.table = table;
         this.cards = [];
+        this.card_objects = [];
 
         this.node = createElement('div', 'dealer');
         this.cards_node = createElement('div', 'cards');

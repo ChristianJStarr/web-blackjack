@@ -8,6 +8,22 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 game_manager = BlackJackGameManager()
 
 
+def sleep(seconds):
+    socketio.sleep(seconds)
+
+def message(key, data, to=None):
+    try:
+        if not isinstance(key, str):
+            print(f'Invalid key type: {type(key)}')
+            return
+        print(f'key: {key}, data: {data}, to: {to}')
+        if to:
+            socketio.emit(key, data, to=to)
+        else:
+            socketio.emit(key, data)
+    except:
+        print('err')
+
 @app.route('/')
 def home():
     games = game_manager.games
@@ -17,9 +33,7 @@ def home():
 def game(game_id):
     game = game_manager.get_game(game_id)
     if not game:
-        def message_fn(key, data, to):
-            socketio.emit(key,data, to=to)
-        game = game_manager.create_game(game_id, message_fn)
+        game = game_manager.create_game(game_id, message, sleep)
         socketio.start_background_task(game.game_loop)
 
     return render_template('game.html', game_id=game_id)
@@ -33,6 +47,7 @@ def disconnect():
 
 @socketio.on('join_game')
 def handle_join_game(data):
+    print('handle_join_game')
     player, game = game_manager.get_session(request.sid)
 
     if not game and data.get('game_id'):
@@ -62,6 +77,7 @@ def handle_join_game(data):
     if not seat_id:
         emit('error', {'message': error})
     else:
+        print('assigning player')
         emit('player_assigned', {
             'player_id': player.id,
             'seat_id': seat_id,
@@ -89,6 +105,8 @@ def handle_player_action(data):
 
     if not success:
         emit('error', {'message': error})
+    else:
+        emit('player_action', {'success': True})
 
 @socketio.on('player_bet')
 def handle_player_bet(data):
@@ -106,11 +124,15 @@ def handle_player_bet(data):
     if not amount:
         emit('error', {'message': 'Amount required'})
         return
-
+    print('player bet', amount)
     success, error = game.player_bet(player, amount)
-
+    print('player bet', amount)
     if not success:
+        print('player error', amount)
         emit('error', {'message': error})
+    else:
+        print('player success', amount)
+        emit('player_bet', {'success': True})
 
 
 
