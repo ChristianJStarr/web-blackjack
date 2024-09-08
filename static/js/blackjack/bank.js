@@ -12,6 +12,8 @@ export class Bank {
         this.chips_node = createElement('div', 'bank__chips');
         this.balance_node = createElement('div', 'bank__balance');
 
+        this.header_balance = document.querySelector('.header__balance');
+
         this.balance_node.textContent = `$${this.balance}`;
 
         this.node.append(
@@ -20,23 +22,17 @@ export class Bank {
         );
     }
 
-    update(state) {
-        const seats = state?.seats ?? [];
-        const active_seat = this.table.game.seat_id;
-
-        let balance = 0;
-
-        for (const seat of seats) {
-            if (seat.id === active_seat) {
-                balance = seat.player?.balance ?? 0;
-            }
-        }
-
+    updateBalance(balance) {
         if(balance !== this.balance) {
             this.balance = balance;
             this.balance_node.textContent = `$${this.balance}`;
+            if (this.header_balance) {
+                this.header_balance.textContent = `$${this.balance}`;
+            }
         }
+    }
 
+    update(state) {
         if (!this.chips_node.children.length) {
             const chips = state?.chips ?? [];
 

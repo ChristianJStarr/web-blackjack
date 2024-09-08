@@ -8,7 +8,7 @@ export class Seats {
         this.node = createElement('div', 'seats');
 
         this.seats = Object.fromEntries(Array.from({ length: count },
-            (_, id) => [id, new Seat(table, id)]
+            (_, id) => [id+1, new Seat(table, id+1)]
         ));
 
         for (const seat of Object.values(this.seats)) {

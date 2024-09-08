@@ -10,9 +10,11 @@ export class Seat {
         this.cards = [];
         this.bet = 0;
         this.player = {};
+        this.hand_value = 0;
 
         this.node = createElement('div', 'seat');
         this.cards_node = createElement('div', 'seat__cards');
+        this.hand_value_node = createElement('div', 'seat__hand-value');
         this.player_node = createElement('div', 'seat__player');
         this.bet_node = createElement('div', 'seat__bet');
         this.bet_text_node = createElement('div', 'seat__bet-text');
@@ -21,6 +23,7 @@ export class Seat {
 
         this.node.append(
             this.cards_node,
+            this.hand_value_node,
             this.bet_node,
             this.player_node,
             this.bet_text_node
@@ -32,6 +35,7 @@ export class Seat {
             const cards = state?.cards ?? [];
             const bet = state?.bet ?? 0;
             const player = state?.player ?? {};
+            const hand_value = state?.hand_value ?? 0;
 
             if(cards !== this.cards) {
                 this.setCards(cards);
@@ -42,13 +46,16 @@ export class Seat {
             if(player !== this.player) {
                 this.setPlayer(player);
             }
+            if(hand_value !== this.hand_value) {
+                this.setHandValue(hand_value);
+            }
         }
         catch (err) {
             console.error(`Failed to update seat ID ${this.id}`, err);
         }
     }
     setCards(cards) {
-        if (cards) {
+        if (cards?.length) {
             for (const [index, card] of cards.entries()) {
                 if (this.cards[index]) {
                     if(this.cards[index] !== card) {
@@ -66,17 +73,36 @@ export class Seat {
         }
         this.cards = cards;
     }
+    setHandValue(hand_value) {
+        if(hand_value) {
+            this.hand_value_node.textContent = hand_value;
+        }
+        else {
+            this.hand_value_node.textContent = '';
+        }
+        this.hand_value = hand_value;
+    }
     setBet(bet) {
         if (bet) {
-            const chips = this.table?.state?.chips ?? [];
-            this.bet_text_node = `$${bet}`;
-            while (bet > 0) {
-                for (const chip_size of chips.sort((a, b) => b - a)) {
-                    if(chip_size <= bet) {
-                        bet -= chip_size;
+            const chips = this.table?.chips ?? [];
+            this.bet_text_node.textContent = `$${bet}`;
+            let count = bet;
+            chips.sort((a, b) => b - a);
+
+            while (count > 0) {
+                let chipAdded = false;
+                for (const chip_size of chips) {
+                    if (chip_size <= count) {
+                        count -= chip_size;
                         const chip_object = new Chip(chip_size);
                         this.bet_node.appendChild(chip_object.node);
+                        chipAdded = true;
+                        break; // Break after adding a chip to avoid unnecessary checks
                     }
+                }
+                if (!chipAdded) {
+                    // This means no chip could be added, prevent infinite loop
+                    break;
                 }
             }
             this.organizeChips();
@@ -88,7 +114,7 @@ export class Seat {
     }
     setPlayer(player) {
         if(player?.id) {
-            this.player_node.textContent = player.id;
+            this.player_node.textContent = player.name;
         }
         this.player = player;
     }

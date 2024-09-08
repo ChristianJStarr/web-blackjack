@@ -30,7 +30,7 @@ export class Card {
             rank = card.rank;
             suit = card.suit;
         }
-        if(rank === 10) {
+        if(rank === '10') {
             rank = 'T';
         }
 

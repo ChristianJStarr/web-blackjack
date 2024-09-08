@@ -27,7 +27,9 @@ export class Game {
             this.socket.on('player_assigned', (data)=> { this.onPlayerAssigned(this,data) });
             this.socket.on('game_state', (data)=> { this.onGameState(this,data) });
             this.socket.on('player_bet', (data)=> { this.onPlayerBet(this,data) });
+            this.socket.on('player_bust', (data)=> { this.onPlayerBust(this,data) });
             this.socket.on('round_result', (data)=> { this.onRoundResult(this,data) });
+            this.socket.on('message', (data)=> { this.onPlayerMessage(this,data) });
         }
     }
     disconnect() {
@@ -41,7 +43,6 @@ export class Game {
         })
     }
     action(action, data=null) {
-        console.log(`action: ${action}`, data);
         this.socket.emit(action, data ? data : {});
     }
 
@@ -52,17 +53,33 @@ export class Game {
     onConnect(game, data={}) {
         game.joinGame();
     }
-    onDisconnect(game, data={}) {}
+    onDisconnect(game, data={}) {
+    }
     onPlayerAssigned(game, data={}) {
-        game.player_id = data.player_id;
-        game.seat_id = data.seat_id ? data.seat_id : 0;
-        game.balance = data.balance ? data.balance : 0;
+        game.player_id = data.player?.id;
+        game.seat_id = data.seat_id ?? 0;
+        game.balance = data?.balance ?? 0;
+        game.table.bank.updateBalance(game.balance);
+        game.addState(data.game_state)
     }
     onGameState(game, data={}) {
         game.addState(data);
     }
-    onPlayerBet(game, data={}) {}
-    onRoundResult(game, data={}) {}
+    onPlayerBet(game, data={}) {
+        game.balance = data?.balance ?? 0;
+        game.table.bank.updateBalance(game.balance);
+    }
+    onRoundResult(game, data={}) {
+        game.balance = data?.balance ?? 0;
+        game.table.bank.updateBalance(game.balance);
+        game.table.message.update(data);
+    }
+    onPlayerMessage(game, data) {
+        game.table.message.setTempMessage(data);
+    }
+    onPlayerBust(game, data) {
+        game.table.message.setTempMessage(data);
+    }
 
 
     //---------------------------------------
