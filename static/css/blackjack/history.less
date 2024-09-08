@@ -1,0 +1,44 @@
+.history {
+  grid-area: history;
+  overflow: hidden;
+  @result-size: @u;
+  padding-right:  @u;
+
+  &__results {
+    overflow: hidden;
+    display: flex;
+    gap: 0.25em;
+    flex-wrap: wrap;
+    font-size: calc(@result-size * 2);
+  }
+  &__label {
+    font-size: @font-size-sm;
+    color: white;
+    text-transform: uppercase;
+  }
+  &__result {
+    width: 1em;
+    height: 1em;
+    font-size: 0.75em;
+    padding: 0.2em 0.125em;
+    color: white;
+    background-color: #26341a;
+    display: grid;
+    align-items: center;
+    text-align: center;
+    line-height: 0.75em;
+    border: solid 1px white;
+    opacity: 0.5;
+    border-radius: 0.25em;
+
+    &:first-child {
+      opacity: 1;
+    }
+    &.-B {
+      background-color: red;
+    }
+    &.-BJ {
+      background-color: #0fef0f;
+    }
+  }
+}

@@ -1,0 +1,76 @@
+
+
+
+
+
+
+.game-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  max-width: @desktop-max-width;
+  margin: 1em auto;
+
+  &__title {
+    grid-column: 1 / -1;
+  }
+  &:nth-of-type(1) {
+    border-color: orange;
+  }
+}
+
+.game {
+  @game-bg:darken(@body-bg, 2.5%);
+  background: @game-bg;
+  border-radius: 0.25em;
+  padding: 1em;
+  gap: 0.75em;
+  display: flex;
+  flex-direction: column;
+
+  &__preview {
+    background: lighten(@game-bg, 55%);
+    aspect-ratio: 1.8;
+    border-radius: 0.25em;
+    position: relative;
+
+    &::before {
+      content: 'Loading Preview...';
+      position: absolute;
+      inset: 40% 0 0 0;
+      text-align: center;
+    }
+  }
+
+  &__seats {
+    display: flex;
+    gap: 0.25em;
+  }
+  &__seat {
+    flex: 1;
+    aspect-ratio: 1;
+    display: block;
+    background: lighten(@game-bg, 35%);
+    border-radius: 50%;
+    opacity: 0.25;
+    &.-occupied {
+      opacity: 1;
+    }
+  }
+
+  &__join {
+    background: lighten(@game-bg, 15%);
+    color: white;
+    text-align: center;
+    border-radius: 0.25em;
+    font-size: 1.25em;
+    text-transform: uppercase;
+    padding: 0.25em 0 0.1em 0;
+    line-height: 1em;
+    opacity: 0.85;
+    transition: opacity ease 0.25s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

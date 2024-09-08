@@ -1,0 +1,74 @@
+
+.modal {
+  position: absolute;
+  background-color: rgba(0,0,0,0.45);
+  inset: 0;
+  display: none;
+  z-index: 2000;
+  backdrop-filter: blur(10px);
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+
+  &.-show {
+    display: grid;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+  }
+  &__title {
+    font-size: 1.25em;
+  }
+  &__close {
+    font-size: 1em;
+    cursor: pointer;
+  }
+  &__body {
+    display: grid;
+    background: white;
+    z-index: 2;
+    border-radius: 1rem;
+    padding: 1em;
+    min-width: 30vw;
+    gap: 1em;
+  }
+}
+
+.modal.-login,.modal.-signup, .modal.-guest{
+  .modal__body {
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    input[type="text"] {
+      border: solid 2px grey;
+      border-radius: 0.25em;
+      padding: 0.5em;
+      margin-bottom: 1em;
+    }
+    input[type="submit"] {
+      text-transform: uppercase;
+      color: white;
+      font-size: 1.5em;
+      padding: 0.15em 0 0 0;
+      border-radius: 0.25em;
+      background-color: lighten(@body-bg, 5%);
+      margin-top: 0.5em;
+      cursor: pointer;
+    }
+    a{
+      text-transform: uppercase;
+      color: darken(@body-bg, 5%);
+      font-size: 1.5em;
+      border-radius: 0.25em;
+      padding: 0.15em 0 0 0;
+      background-color: lighten(@body-bg, 65%);
+      text-align: center;
+      cursor: pointer;
+    }
+  }
+}

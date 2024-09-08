@@ -1,0 +1,116 @@
+
+.header {
+  background-color: @header-bg-color;
+  border-bottom: solid 0.5em @header-border-color;
+
+
+  &__container {
+    display: flex;
+    align-items: center;
+    padding: 1em;
+    gap: 1em;
+    max-width: @desktop-max-width;
+    margin: 0 auto;
+  }
+
+
+
+  &__title {
+    flex: 1;
+    display: flex;
+    font-size: 2.25em;
+
+    &__text {
+      color: @header-text-color;
+      line-height: 1em;
+      font-size: 1em;
+      display: flex;
+      align-items: center;
+      padding-top: 0.15em;
+      font-weight: 400;
+      text-transform: uppercase;
+    transition: color ease 0.25s;
+    }
+
+    &__icon {
+      display: block;
+      width: 1em;
+      height: 1em;
+      font-size: 0.7em;
+      position: relative;
+      opacity: 0.75;
+      transition: opacity ease 0.25s;
+
+      img {
+        position: absolute;
+        right:0;left:0;top:0.30em;bottom:0;
+        height: 1em;
+        width: 0.65em;
+      }
+      img:nth-of-type(1) {
+        transform: rotate(-5deg);
+      }
+      img:nth-of-type(2) {
+        transform: rotate(25deg);
+      }
+    }
+
+    &:hover &{
+      &__text {
+        color: lighten(@header-text-color, 100%);
+      }
+      &__icon {
+        opacity: 1;
+      }
+    }
+  }
+
+
+  &__link, &__balance,&__player {
+    font-weight: 400;
+  }
+  &__link {
+    background-color: lighten(@header-bg-color, 5%);
+    color: @header-text-color;
+    transition: color ease 0.25s, background-color ease 0.25s;
+    padding: 0 0.5em;
+    align-self: stretch;
+    align-items: center;
+    display: flex;
+    border-radius: 0.25em;
+    text-transform: uppercase;
+    font-size: 1.5em;
+    line-height: 1.25em;
+    padding-top:0.15em;
+    cursor: pointer;
+    svg {
+      width: 1em;
+      height: 1em;
+    }
+
+
+
+    &:hover {
+      color: lighten(@header-text-color, 100%);
+      background-color: lighten(@header-bg-color, 10%);
+    }
+  }
+  &__balance {
+    color: goldenrod;
+    font-size: 2.25em;
+    line-height: 1em;
+    display: flex;
+    align-items: center;
+    padding-top: 0.15em;
+    padding-right: 0.25em;
+  }
+  &__player {
+    color: @header-text-color;
+    font-size: 1.75em;
+    line-height: 1em;
+    display: flex;
+    align-items: center;
+    padding-top: 0.15em;
+    padding-right: 0.25em;
+  }
+}

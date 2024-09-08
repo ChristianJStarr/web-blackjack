@@ -1,0 +1,26 @@
+
+.footer {
+  background-color: @footer-bg-color;
+  border-top: solid 0.5em @footer-border-color;
+
+  &__container {
+    display: flex;
+    padding: 1em;
+    max-width: @desktop-max-width;
+    margin: 0 auto;
+  }
+
+  &__copy {
+    text-align: left;
+    color: @footer-text-color;
+    flex: 1;
+  }
+  &__link {
+    text-align: center;
+    color: @footer-text-color;
+  }
+  &__split {
+    color: @footer-text-color;
+    padding: 0 0.5em;
+  }
+}

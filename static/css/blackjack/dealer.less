@@ -1,0 +1,21 @@
+.dealer {
+  grid-area: dealer;
+  border: solid @border-width darkorange;
+  width: 100%;
+  align-self: center;
+  position: relative;
+  overflow: visible;
+
+  &__cards {
+    display: flex;
+    flex-direction: row-reverse;
+    font-size: 0.75em;
+    min-height: @card-height;
+  }
+  &__hand-value {
+    position: absolute;
+    right: -1em;
+    top: -1em;
+    color: white;
+  }
+}

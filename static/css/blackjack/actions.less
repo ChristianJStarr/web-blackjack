@@ -1,0 +1,31 @@
+
+
+.actions {
+  grid-area: actions;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
+  align-content: center;
+
+  .action {
+    flex: 1;
+    outline: none;
+    appearance: none;
+    border: solid @border-width white;
+    background-color: rgba(255,255,255,0.25);
+    border-radius: @border-radius;
+    font-size: @font-size-sm;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: @padding;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(200,200,200,0.25);
+      transform: scale(1.05);
+    }
+  }
+
+}

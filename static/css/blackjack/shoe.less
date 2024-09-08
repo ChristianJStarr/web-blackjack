@@ -1,0 +1,38 @@
+
+
+
+
+.shoe {
+  @card-size: calc(@u * 0.5);
+  grid-area: shoe;
+  overflow: hidden;
+  padding-left: @u;
+
+  &__cards {
+    overflow: hidden;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, @card-size);
+    gap: calc(@u * 0.25);
+  }
+  &__label {
+    font-size: @font-size-sm;
+    color: white;
+    text-transform: uppercase;
+    text-align: right;
+  }
+  &__card {
+    height: @card-size;
+    color: white;
+    background-color: rgba(219, 245, 195, 1);
+    opacity: 0.35;
+    border-radius: @border-radius;
+    &:first-child {
+      opacity: 1;
+    }
+    &.-cut {
+      background-color: rgb(246, 74, 74);
+      opacity: 1;
+    }
+  }
+}

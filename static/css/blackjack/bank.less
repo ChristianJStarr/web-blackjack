@@ -1,0 +1,39 @@
+
+.bank {
+  grid-area: bank;
+  display: flex;
+  align-self: center;
+  padding: 8px 0 5px 0;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+  &__chips {
+    flex: 1 0 100%;
+    display: flex;
+    justify-content: space-evenly;
+    font-size: 4em;
+    padding: @u;
+    border: solid @border-width white;
+    border-radius: 5px;
+  }
+  &__text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 1 45%;
+    gap: 5px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 10px;
+    margin: 0;
+    span {
+      font-size: 1.4em;
+    }
+  }
+  &__balance {
+    font-weight: bold;
+    color: white;
+    font-size: @font-size-sm;
+  }
+}

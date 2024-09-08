@@ -1,4 +1,4 @@
-@u: calc(clamp(500px, 100vw,1600px) / 100);
+@u: calc(clamp(500px, 100vw,1200px) / 100);
 
 @border-width: calc(@u * 0.2);
 @border-radius: @u;
@@ -13,3 +13,15 @@
 @card-width: calc(@card-height * @card-aspect);
 @card-offset-x: 0.40;
 @card-offset-y: 0.75;
+
+@desktop-max-width: 1200px;
+
+@body-bg: #3f562b;
+@header-bg-color: darken(@body-bg, 5%);
+@header-text-color: lighten(@header-bg-color, 60%);
+@header-border-color: darken(@header-bg-color, 5%);
+
+
+@footer-bg-color: darken(@body-bg, 5%);
+@footer-text-color: lighten(@header-bg-color, 60%);
+@footer-border-color: darken(@header-bg-color, 5%);

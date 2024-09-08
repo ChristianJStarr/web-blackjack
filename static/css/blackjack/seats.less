@@ -1,0 +1,102 @@
+
+
+.seats {
+  display: flex;
+  flex-direction: row;
+  grid-area: seats;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.seat {
+    width: calc(10% - @border-width - @border-width);
+    aspect-ratio: 1;
+    background-color: rgba(255,255,255,0.2);
+    border: solid @border-width white;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: auto;
+
+    &.-active {
+      border: solid @border-width gold;
+    }
+
+    &__bet {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+      z-index: 2;
+    }
+    &__bet-text {
+      height: 0;
+      position: absolute;
+      bottom: -1.5em;
+      color: white;
+      text-align: center;
+      font-size: 1.2em;
+      right: 0;left: 0;
+    }
+    &__hand-value {
+      position: absolute;
+      left: -1em;
+      bottom: -1em;
+      color: white;
+    }
+    &__player {
+      position: absolute;
+      height: 0;
+      bottom: -0.5em;
+      text-align: center;
+      color: white;
+      right: 0;left: 0;
+    }
+    &__cards {
+      position: absolute;
+      bottom: 100%;
+      flex-direction: column-reverse;
+      order: -1;
+      display: flex;
+      z-index: 1;
+      overflow:visible;
+      right:0;left:0;
+      .card {
+        &:nth-child(2) {
+          transform: translate3d(calc((@card-width * 1) * @card-offset-x), calc((@card-height * 1) * @card-offset-y), 0);
+        }
+        &:nth-child(3) {
+          transform: translate3d(calc((@card-width * 2) * @card-offset-x), calc((@card-height * 2) * @card-offset-y), 0);
+        }
+        &:nth-child(4) {
+          transform: translate3d(calc((@card-width * 3) * @card-offset-x), calc((@card-height * 3) * @card-offset-y), 0);
+        }
+        &:nth-child(5) {
+          transform: translate3d(calc((@card-width * 4) * @card-offset-x), calc((@card-height * 4) * @card-offset-y), 0);
+        }
+        &:nth-child(6) {
+          transform: translate3d(calc((@card-width * 5) * @card-offset-x), calc((@card-height * 5) * @card-offset-y), 0);
+        }
+        &:nth-child(7) {
+          transform: translate3d(calc((@card-width * 6) * @card-offset-x), calc((@card-height * 6) * @card-offset-y), 0);
+        }
+        &:nth-child(8) {
+          transform: translate3d(calc((@card-width * 7) * @card-offset-x), calc((@card-height * 7) * @card-offset-y), 0);
+        }
+        &:nth-child(9) {
+          transform: translate3d(calc((@card-width * 8) * @card-offset-x), calc((@card-height * 8) * @card-offset-y), 0);
+        }
+        &:nth-child(10) {
+          transform: translate3d(calc((@card-width * 9) * @card-offset-x), calc((@card-height * 9) * @card-offset-y), 0);
+        }
+        &:nth-child(11) {
+          transform: translate3d(calc((@card-width * 10) * @card-offset-x), calc((@card-height * 10) * @card-offset-y), 0);
+        }
+        &:nth-child(12) {
+          transform: translate3d(calc((@card-width * 12) * @card-offset-x), calc((@card-height * 11) * @card-offset-y), 0);
+        }
+      }
+    }
+  }

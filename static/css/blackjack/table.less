@@ -1,0 +1,36 @@
+.table {
+  max-width: @desktop-max-width;
+  margin: 0 auto;
+  box-sizing: border-box;
+  border-radius: @border-radius;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr min-content 1fr 1fr;
+  grid-template-areas:
+          "history dealer shoe"
+          "message message message"
+          "seats seats seats"
+          ". bank actions";
+  gap: @padding-md;
+  padding: @padding-md;
+  width:100%;
+  aspect-ratio: 1.6;
+  background: darkolivegreen;
+  * {
+    user-select: none;
+  }
+  font-size: clamp(10px, 2vw, 30px);
+}
+
+@media (max-width: 1100px) {
+  .table {
+    grid-template-areas:
+          "history dealer shoe"
+          "message message message"
+          "seats seats seats"
+          "actions actions actions"
+          "bank bank bank";
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr min-content 1fr 1fr 1fr;
+  }
+}

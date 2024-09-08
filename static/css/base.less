@@ -1,0 +1,50 @@
+
+
+@import 'variables';
+@import 'reset';
+@import 'fonts';
+@import 'header';
+@import 'footer';
+@import 'modal';
+@import 'home';
+@import 'leaderboard';
+
+@import 'blackjack/game';
+
+body {
+  display: block;
+  background-color: @body-bg;
+  font-family: @font-primary;
+
+  .container {
+    position: relative;
+    min-height: 88vh;
+  }
+}
+
+section {
+  border: solid 2px rgba(255, 255, 255, 0.5);
+  border-radius: @border-radius;
+  padding: 1em;
+  gap: 1em;
+  h2 {
+    color: white;
+    flex-basis: 100%;
+    text-align: center;
+    font-size: 1.75em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25em;
+    span {
+      font-size: 0.75em;
+      opacity: 0.85;
+      &:before {
+        content: '(';
+      }
+      &:after {
+        content: ')';
+      }
+    }
+  }
+}
