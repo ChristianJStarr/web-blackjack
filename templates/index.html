@@ -1,43 +1,158 @@
-<html lang="EN">
-    <head>
-        <title>Web Blackjack | Games</title>
-        <link rel="stylesheet" href="/static/css/main.css">
-        <link rel="stylesheet" href="/static/css/game.css">
-    </head>
-    <body>
-        <header>
-            <h1>BlackJack Game</h1>
-            <a class="create-link" href="/game/4Re9">Create Game</a>
-        </header>
-        <div class="game-container">
-            {% for game_id, game in games %}
-                <div class="game" data-game-id="{{ game_id }}">
-                    <div class="game__preview" data-state="{{ game.state|tojson }}"></div>
-                    <div class="game__details">
-                        <p class="game__detail">{{ game.seats.length }}</p>
-                    </div>
-                    <div class="game__seats">
-                        {% for seat in game.seats %}
-                            <div class="game__seat {% if seat.player %}-player{% endif %}"></div>
-                        {% endfor %}
-                    </div>
-                    <a class="game__play" href="/game/{{ game_id }}">Join Game</a>
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Web Blackjack | Games</title>
+    <link rel="stylesheet" href="/static/css/base.css">
+{% endblock %}
+
+{% block body %}
+    <section class="game-group">
+            <h2 class="game-group__title">
+                High-Limit Tables
+                <span>472 Tables</span>
+            </h2>
+            <div class="game">
+                <div class="game__preview"></div>
+                <div class="game__seats">
+                    <span class="game__seat -occupied"></span>
+                    <span class="game__seat -occupied"></span>
+                    <span class="game__seat -occupied"></span>
+                    <span class="game__seat"></span>
+                    <span class="game__seat"></span>
+                    <span class="game__seat"></span>
                 </div>
-            {% endfor %}
+                <a class="game__join" href="/game/abcd">Join Table</a>
+            </div>
+            <div class="game">
+                <div class="game__preview"></div>
+                <div class="game__seats">
+                    <span class="game__seat -occupied"></span>
+                    <span class="game__seat -occupied"></span>
+                    <span class="game__seat -occupied"></span>
+                    <span class="game__seat"></span>
+                    <span class="game__seat"></span>
+                    <span class="game__seat"></span>
+                </div>
+                <a class="game__join" href="/game/abcd">Join Table</a>
+            </div>
+            <div class="game">
+                <div class="game__preview"></div>
+                <div class="game__seats">
+                    <span class="game__seat -occupied"></span>
+                    <span class="game__seat -occupied"></span>
+                    <span class="game__seat -occupied"></span>
+                    <span class="game__seat"></span>
+                    <span class="game__seat"></span>
+                    <span class="game__seat"></span>
+                </div>
+                <a class="game__join" href="/game/abcd">Join Table</a>
+            </div>
+            <div class="game">
+                <div class="game__preview"></div>
+                <div class="game__seats">
+                    <span class="game__seat -occupied"></span>
+                    <span class="game__seat -occupied"></span>
+                    <span class="game__seat -occupied"></span>
+                    <span class="game__seat"></span>
+                    <span class="game__seat"></span>
+                    <span class="game__seat"></span>
+                </div>
+                <a class="game__join" href="/game/abcd">Join Table</a>
+            </div>
+            <div class="game">
+                <div class="game__preview"></div>
+                <div class="game__seats">
+                    <span class="game__seat -occupied"></span>
+                    <span class="game__seat -occupied"></span>
+                    <span class="game__seat -occupied"></span>
+                    <span class="game__seat"></span>
+                    <span class="game__seat"></span>
+                    <span class="game__seat"></span>
+                </div>
+                <a class="game__join" href="/game/abcd">Join Table</a>
+            </div>
+        </section>
+    <section class="game-group">
+        <h2 class="game-group__title">
+            Standard Tables
+            <span>860 Tables</span>
+        </h2>
+        <div class="game">
+            <div class="game__preview"></div>
+            <div class="game__seats">
+                <span class="game__seat -occupied"></span>
+                <span class="game__seat -occupied"></span>
+                <span class="game__seat -occupied"></span>
+                <span class="game__seat"></span>
+                <span class="game__seat"></span>
+                <span class="game__seat"></span>
+            </div>
+            <a class="game__join" href="/game/abcd">Join Table</a>
         </div>
-        <script type="module">
-            import { Table } from '/static/js/blackjack/index.js';
-            document.addEventListener('DOMContentLoaded', function() {
-                const games = document.querySelectorAll('.game__preview');
-                if(games) {
-                    for (const game of games) {
-                        const game_state = game.dataset.state;
-                        const table = new Table();
-                        game.appendChild(table.node);
-                        table.update(game_state);
-                    }
+        <div class="game">
+            <div class="game__preview"></div>
+            <div class="game__seats">
+                <span class="game__seat -occupied"></span>
+                <span class="game__seat -occupied"></span>
+                <span class="game__seat -occupied"></span>
+                <span class="game__seat"></span>
+                <span class="game__seat"></span>
+                <span class="game__seat"></span>
+            </div>
+            <a class="game__join" href="/game/abcd">Join Table</a>
+        </div>
+        <div class="game">
+            <div class="game__preview"></div>
+            <div class="game__seats">
+                <span class="game__seat -occupied"></span>
+                <span class="game__seat -occupied"></span>
+                <span class="game__seat -occupied"></span>
+                <span class="game__seat"></span>
+                <span class="game__seat"></span>
+                <span class="game__seat"></span>
+            </div>
+            <a class="game__join" href="/game/abcd">Join Table</a>
+        </div>
+        <div class="game">
+            <div class="game__preview"></div>
+            <div class="game__seats">
+                <span class="game__seat -occupied"></span>
+                <span class="game__seat -occupied"></span>
+                <span class="game__seat -occupied"></span>
+                <span class="game__seat"></span>
+                <span class="game__seat"></span>
+                <span class="game__seat"></span>
+            </div>
+            <a class="game__join" href="/game/abcd">Join Table</a>
+        </div>
+        <div class="game">
+            <div class="game__preview"></div>
+            <div class="game__seats">
+                <span class="game__seat -occupied"></span>
+                <span class="game__seat -occupied"></span>
+                <span class="game__seat -occupied"></span>
+                <span class="game__seat"></span>
+                <span class="game__seat"></span>
+                <span class="game__seat"></span>
+            </div>
+            <a class="game__join" href="/game/abcd">Join Table</a>
+        </div>
+    </section>
+
+    {% include 'leaderboard.html' %}
+
+    <script type="module">
+        import { Table } from '/static/js/blackjack/index.js';
+        document.addEventListener('DOMContentLoaded', function() {
+            const games = document.querySelectorAll('.game__preview');
+            if(games) {
+                for (const game of games) {
+                    {#const game_state = game.dataset.state;#}
+                    {#const table = new Table();#}
+                    {#game.appendChild(table.node);#}
+                    {#table.update(game_state);#}
                 }
-            });
-        </script>
-    </body>
-</html>
+            }
+        });
+    </script>
+{% endblock %}

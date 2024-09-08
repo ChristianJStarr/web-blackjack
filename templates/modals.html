@@ -1,0 +1,63 @@
+{% if not player %}
+    <div class="modal -login" data-modal="login">
+        <div class="modal__body">
+            <div class="modal__header">
+                <p class="modal__title">Account Log In</p>
+                {% if not player_required %}
+                    <span class="modal__close">[close]</span>
+                {% endif %}
+            </div>
+            <form action="/login?ref={{ url_for(request.endpoint, **request.view_args) }}" method="POST">
+                <label for="login_username">Username</label>
+                <input type="text" name="username" id="login_username" value="admin">
+                <label for="login_password">Password</label>
+                <input type="text" name="password" id="login_password" value="password">
+                <input type="submit" value="login">
+            </form>
+            <a data-modal="signup">Create Account</a>
+            <a data-modal="guest">Continue as Guest</a>
+        </div>
+    </div>
+    <div class="modal -signup {% if player_required and not player %}-show{% endif %}" data-modal="signup">
+        <div class="modal__body">
+            <div class="modal__header">
+                <p class="modal__title">Create Account</p>
+                {% if not player_required %}
+                    <span class="modal__close">[close]</span>
+                {% endif %}
+            </div>
+            <form action="/signup?ref={{ url_for(request.endpoint, **request.view_args) }}" method="POST">
+                <label for="signup_name">Display Name</label>
+                <input type="text" id="signup_name" name="name" value="Player1">
+                <label for="signup_username">Username</label>
+                <input type="text" id="signup_username" name="username" value="player1">
+                <label for="signup_password">Password</label>
+                <input type="text" id="signup_password" name="password" value="password">
+                <label for="signup_password2">Repeat Password</label>
+                <input type="text" id="signup_password2" name="password2" value="password">
+                <input type="submit" value="Create Account">
+            </form>
+            <a data-modal="login">Login</a>
+            <a data-modal="guest">Continue as Guest</a>
+        </div>
+    </div>
+    <div class="modal -guest " data-modal="guest">
+        <div class="modal__body">
+            <div class="modal__header">
+                <p class="modal__title">Continue as Guest</p>
+                {% if not player_required %}
+                    <span class="modal__close">[close]</span>
+                {% endif %}
+            </div>
+            <form action="/signup?ref={{ url_for(request.endpoint, **request.view_args) }}" method="POST">
+                <label for="guest_name">Display Name</label>
+                <input type="text" id="guest_name" name="name" value="Guest1">
+                <input type="text" id="signup_username" name="username" value="player1" hidden>
+                <input type="text" id="signup_password2" name="password" value="password" hidden>
+                <input type="text" id="signup_password2" name="password2" value="password" hidden>
+                <input type="submit" value="Continue">
+            </form>
+        </div>
+    </div>
+    <script src="/static/js/modal.js"></script>
+{% endif %}

@@ -1,0 +1,25 @@
+<header class="header">
+    <div class="header__container">
+        <a href="/" class="header__title">
+            <span class="header__title__icon">
+                <img src="/static/cards/regular/AH.svg" alt="AH">
+                <img src="/static/cards/regular/JC.svg" alt="JC">
+            </span>
+            <h1 class="header__title__text">BlackJack Game</h1>
+        </a>
+
+        {% if player %}
+            <a class="header__player">{{ player.name }}</a>
+            <a class="header__balance">${{ player.balance }}</a>
+            {% if game_id %}
+                <a class="header__link -share" data-copy="/game/{{ game_code }}">Share Table</a>
+            {% else %}
+                <a class="header__link -create" href="/game/{{ r_game_code }}">New Table</a>
+            {% endif %}
+            <a class="header__link -logout" href="/logout">Log Out</a>
+        {% else %}
+            <a class="header__link -logout" data-modal="login">Log In</a>
+            <a class="header__link -signup" data-modal="signup">Sign Up</a>
+        {% endif %}
+    </div>
+</header>

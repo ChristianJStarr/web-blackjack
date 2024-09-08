@@ -1,0 +1,25 @@
+<section class="leaderboard">
+        <h2 class="leaderboard__title">
+            Leaderboard
+            <span>{{ leaderboard|length }} Players</span>
+        </h2>
+        <table>
+            <tr>
+                <td>Player</td>
+                <td>Balance</td>
+                <td>W/L Ratio</td>
+                <td>Wins</td>
+                <td>Losses</td>
+            </tr>
+            {% for player in leaderboard %}
+                <tr>
+                    <td>{{ player.name }}</td>
+                    <td>${{ player.balance }}</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+            {% endfor %}
+
+        </table>
+    </section>

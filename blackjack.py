@@ -1,34 +1,8 @@
 import random
-import time
-import uuid
+from flask import current_app
+from flask_socketio import join_room, leave_room
 import utility as u
-
-
-
-class BlackjackPlayer:
-    def __init__(self, name, session_id, balance):
-        self.name = name
-        self.id = str(uuid.uuid4())
-        self.sid = session_id
-        self.balance = balance
-        self.game_id = None
-
-    def can_bet(self, amount):
-        return self.balance >= amount
-
-    def add_funds(self, amount):
-        self.balance += amount
-
-    def remove_funds(self, amount):
-        self.balance -= amount
-
-    @property
-    def state(self):
-        return {
-            'name': self.name,
-            'id': self.id,
-            'balance': self.balance,
-        }
+from models import BlackjackPlayer, get_scoped_session
 
 class BlackJackSeat:
 
@@ -49,12 +23,38 @@ class BlackJackSeat:
         return u.hand_value(self.cards)
 
     @property
+    def is_blackjack(self):
+        return self.hand_value == 21 and len(self.cards) == 2
+    @property
+    def player(self):
+        session = get_scoped_session()
+        player = None
+        try:
+            if self.player_id:
+                player = session.query(BlackjackPlayer).get(self.player_id)
+        except Exception as e:
+            session.rollback()
+            print(f"Error getting player: {e}")
+        finally:
+            return player
+    @player.setter
+    def player(self, player):
+        if player:
+            self.player_id = player.id
+        else:
+            self.player_id = None
+
+
+
+
+    @property
     def state(self):
         return {
             'id': self.id,
             'player': self.player.state if self.player is not None else None,
             'bet': self.bet,
-            'cards': self.cards
+            'cards': self.cards,
+            'hand_value': self.hand_value
         }
 
 class BlackJackDeck:
@@ -82,6 +82,16 @@ class BlackJackDeck:
     def create_deck(self):
         return [f'{suit}{rank}' for suit in u.suits for rank in u.ranks] * self.deck_count
 
+    @property
+    def state(self):
+        return {
+            'cards': ['X' for x in self.cards],
+            'card_count': self.card_count(),
+            'deck_needs_shuffle': self.deck_needs_shuffle(),
+        }
+
+
+
 class BlackJackDealer:
     DOWN_CARD = 'B2'
 
@@ -90,6 +100,7 @@ class BlackJackDealer:
         self.down_card = None
         self.turned = False
         self.cards = []
+        self.history = []
 
     def clear(self):
         self.up_card = None
@@ -107,66 +118,77 @@ class BlackJackDealer:
         return u.hand_value(self.cards)
 
     @property
+    def is_blackjack(self):
+        return self.hand_value == 21 and len(self.cards) == 2
+    @property
     def state(self):
+        down_card = self.down_card if self.turned or self.down_card == None else self.DOWN_CARD
+        if self.cards:
+            cards = [self.up_card, down_card] + self.cards[2:]
+        else:
+            cards = self.cards
         return {
             'up_card': self.up_card,
-            'down_card': self.down_card if self.turned or self.down_card == None else self.DOWN_CARD,
-            'cards': self.cards
+            'down_card': down_card,
+            'cards': cards,
+            'hand_value': u.hand_value(cards),
+            'history': self.history
         }
 
 class BlackJackGame:
     BET_TIME = 5
+    STANDARD_DELAY = 1
+    BLACKJACK_PAY = 2.5
 
-    def __init__(self, game_id, message_fn, sleep_fn, seat_count=6):
+    def __init__(self, game_id, app, message_fn, sleep_fn, seat_count=6):
         self.id = game_id
         self.seat_count = seat_count
         self.message_fn = message_fn
         self.sleep_fn = sleep_fn
+        self.app = app
         self.deck = BlackJackDeck()
         self.dealer = BlackJackDealer()
         self.seats = [BlackJackSeat(seat) for seat in range(1, seat_count+1)]
-        self.actions = []
+        self.actions = ['stand', 'hit']
+        self.message_text = ''
         self.loop_running = False
         self.turn = 0
+        self.db_session = None
 
 
     ##--------------------------
     ## Game Loop
     ##--------------------------
     def bump(self):
-        print('bumping game')
-        if not self.loop_running:
-            self.game_loop()
+        with self.app.app_context():
+            if not self.loop_running:
+                self.game_loop()
     def game_loop(self):
-        print('game loop started')
         self.loop_running = True
-        while self.player_count():
-            self.deck.check_deck()
-            print('1')
-            self.clear()
-            print('2')
+        self.db_session = get_scoped_session()
+        try:
+            while self.player_count():
+                self.deck.check_deck()
+                self.clear()
 
-            self.wait_for_bets()
-            print('3')
+                self.wait_for_bets()
 
-            self.initial_deal()
-            print('4')
+                self.sleep(1)
 
-            self.wait_for_dealers_turn()
-            print('5')
+                if self.initial_deal():
 
-            self.sleep(2)
-            print('6')
+                    self.wait_for_dealers_turn()
 
-            self.dealers_turn()
-            print('7')
+                    self.sleep(1)
 
-            self.end_round()
-            print('8')
+                    self.dealers_turn()
 
-
-        self.loop_running = False
-        print('Game Loop Stopped')
+                self.end_round()
+                self.sleep(1)
+        except Exception as err:
+            print(f'Error occurred in game loop. Error: {err}')
+        finally:
+            self.loop_running = False
 
 
     ##--------------------------
@@ -174,6 +196,7 @@ class BlackJackGame:
     ##--------------------------
     def clear(self):
         self.turn = 0
+        self.message_text = ''
         for seat in self.seats:
             seat.clear()
         self.dealer.clear()
@@ -181,39 +204,65 @@ class BlackJackGame:
     def initial_deal(self):
         self.dealer.initial_deal(self.deck.deal_card(), self.deck.deal_card())
         self.state_updated()
-        self.sleep(1)
+
         for seat in self.seats:
             if seat.player and seat.bet:
                 seat.cards = [self.deck.deal_card(), self.deck.deal_card()]
                 self.state_updated()
-                self.sleep(1)
+                self.sleep()
+
+        if self.dealer.is_blackjack:
+            self.dealer_message('Dealer has a Blackjack!')
+            return False
+
+        for seat in self.seats:
+            if seat.player and seat.is_blackjack:
+                self.player_message(seat.player, 'You have a Blackjack!')
+                seat.player.add_funds(seat.bet * self.BLACKJACK_PAY)
+
         self.next_turn()
         self.state_updated()
+
+        return True
+
     def dealers_turn(self):
         self.dealer.turned = True
         self.state_updated()
         self.sleep(1)
         while self.dealer.hand_value < 17:
             self.dealer.cards.append(self.deck.deal_card())
-            self.sleep(1)
+            if self.dealer.hand_value > 21:
+                self.dealer_message('Dealer bust')
             self.state_updated()
+            self.sleep(1)
     def end_round(self):
         dealer_value = self.dealer.hand_value
         for seat in self.seats:
             if not seat.player:
                 continue
+            player = seat.player
+
+            if self.dealer.is_blackjack:
+                self.dealer.history.append('BJ')
+            elif dealer_value > 21:
+                self.dealer.history.append('B')
+            else:
+                self.dealer.history.append(dealer_value)
+
+
+            player = self.db_session.query(BlackjackPlayer).get(player.id)
             player_value = seat.hand_value
             if player_value > 21:
                 result = 'bust'
             elif dealer_value > 21 or player_value > dealer_value:
                 result = 'win'
-                seat.player.balance += seat.bet * 2
+                player.add_funds(seat.bet * 2)
             elif player_value == dealer_value:
                 result = 'push'
-                seat.player.balance += seat.bet
+                player.add_funds(seat.bet)
             else:
                 result = 'lose'
-            self.round_result(seat.player, result)
+            self.round_result(player, result)
     def next_turn(self):
         self.turn = self.get_next_turn()
         self.actions = self.get_actions()
@@ -222,27 +271,30 @@ class BlackJackGame:
     ##--------------------------
     ## Flow - Methods
     ##--------------------------
-    def add_player(self, player, role):
-        print('adding player')
-        seat_id = None
-        error = ''
-        for seat in self.seats:
-            if not seat.player:
-                seat.player = player
-                seat.player.game_id = self.id
-                seat_id = seat.id
-                break
-        if not seat_id:
-            error = 'Seat not found'
+    def add_player(self, player):
+        seat_id = 0
+        error = None
+        seat = self.find_seat_by_player(player)
 
-        if seat_id:
-            self.state_updated()
+        if seat:
+            seat_id = seat.id
+        else:
+            for seat in self.seats:
+                if not seat.player:
+                    seat.player = player
+                    seat_id = seat.id
+                    break
+            if not seat_id:
+                error = 'Seat not found'
+            else:
+                self.state_updated()
 
         return seat_id, error
     def remove_player(self, player):
         seat = self.find_seat_by_player(player)
-        seat.player = None
-        self.state_updated()
+        if seat:
+            seat.player = None
+            self.state_updated()
     def player_action(self, player, action):
         success = False
         error = ''
@@ -320,12 +372,11 @@ class BlackJackGame:
     ## Methods
     ##--------------------------
     def player_count(self):
-        print('count')
         return sum([1 if seat.player else 0 for seat in self.seats])
     def get_next_turn(self):
         turn = self.seat_count + 1
         for seat in self.seats:
-            if seat.player and seat.bet and seat.id > self.turn:
+            if seat.player and seat.bet and seat.id > self.turn and seat.hand_value < 21:
                 turn = seat.id
                 break
         return turn
@@ -347,19 +398,23 @@ class BlackJackGame:
     ## Waiting
     ##--------------------------
     def wait_for_bets(self):
-        for x in range(1, self.BET_TIME + 1):
-            if sum([1 if seat.bet else 0 for seat in self.seats]) == self.player_count():
-                return
-            print('bets waiting', self.id)
-            self.sleep(1)
-        while sum([1 if seat.bet else 0 for seat in self.seats]) == 0:
-            print('bets waiting', self.id)
-            self.sleep(1)
+        try:
+            self.message_text = 'Place your bets'
+            self.state_updated()
+            for x in range(1, self.BET_TIME + 1):
+                if sum([1 if seat.bet else 0 for seat in self.seats]) == self.player_count():
+                    return
+                self.sleep(1)
+            while sum([1 if seat.bet else 0 for seat in self.seats]) == 0:
+                self.sleep()
+        finally:
+            self.message_text = 'Bets closed'
+            self.state_updated()
+            self.sleep()
+            self.message_text = ''
+
     def wait_for_dealers_turn(self):
-        print('dealer turn', self.turn)
-        print('dealer seat_count', self.seat_count)
         while self.turn != self.seat_count + 1:
-            print('dealer waiting', self.id)
             self.sleep(1)
 
 
@@ -367,64 +422,110 @@ class BlackJackGame:
     ## Messaging
     ##--------------------------
     def state_updated(self):
-        print(f'Sending game_state with ID: {self.id}')
-        print(f'State: {self.state}')
         self.message('game_state', self.state, self.id)
     def round_result(self, player, result):
-        self.message('round_result', result, player.sid)
+        player = self.db_session.query(BlackjackPlayer).get(player.id)
+        response = {
+            'result': result,
+            'balance': player.balance
+        }
+        self.message('round_result', response, player.sid)
     def player_bust(self, player):
-        self.message('player_bust', player.state, player.sid)
-
-
+        self.message('player_bust', 'You bust!', player.sid)
+    def dealer_message(self, message):
+        self.message_text = message
+    def player_message(self, player, message):
+        self.message('message', message, player.sid)
     def message(self, key, data, to):
         if self.message_fn:
             self.message_fn(key, data, to)
-
-
-    def sleep(self, seconds):
+    def sleep(self, seconds=0):
         if self.sleep_fn:
+            if not seconds:
+                seconds = self.STANDARD_DELAY
             self.sleep_fn(seconds)
 
+    ##--------------------------
+    ## State
+    ##--------------------------
     @property
     def state(self):
         return {
+            'id': self.id,
             'seats': [seat.state for seat in self.seats],
             'dealer': self.dealer.state,
             'turn': self.turn,
             'actions': self.actions,
-            'chips': [1,5,25,50,100,500]
+            'chips': [1,5,25,50,100,500],
+            'message': self.message_text,
+            'shoe': self.deck.state
         }
 
 class BlackJackGameManager:
-    def __init__(self):
+    def __init__(self, app, socketio):
+        self.app = app
+        self.socketio = socketio
         self.games = {}
-        self.players = {}
 
-    def create_game(self, game_id, message_fn, sleep_fn):
-        game = BlackJackGame(game_id, message_fn, sleep_fn)
-        self.games[game_id] = game
+    def bump_game(self, game):
+        with self.app.app_context():
+            self.socketio.start_background_task(game.bump)
+
+    def join_game(self, game, player):
+        join_room(game.id)
+        seat_id, error = game.add_player(player)
+        if not seat_id:
+            self.message('error', {'message': error}, player.sid)
+        else:
+            self.bump_game(game)
+            response = {
+                'success': True,
+                'seat_id': seat_id,
+                'player': player.state,
+                'game_state': game.state,
+                'balance': player.balance,
+            }
+            self.message('player_assigned', response, player.sid)
+
+    def leave_game(self, game, player):
+        leave_room(game.id)
+        game.remove_player(player)
+
+    def player_action(self, game, player, action):
+        success, error = game.player_action(player, action)
+
+        if not success:
+            self.message('error', {'message': error}, player.sid)
+        else:
+            self.message('player_action', {'success': True}, player.sid)
+
+    def player_bet(self, game, player, bet):
+        success, error = game.player_bet(player, bet)
+
+        if not success:
+            self.message('error', {'message': error}, player.sid)
+        else:
+            response = {
+                'success': True,
+                'balance': player.balance
+            }
+            self.message('player_bet', response, player.sid)
+
+    def get_or_create_game(self, game_id):
+        game = self.get_game(game_id)
+        if not game:
+            game = BlackJackGame(game_id, self.app, self.message, self.sleep)
+            self.games[game_id] = game
         return game
 
     def get_game(self, game_id):
         return self.games.get(game_id)
 
-    def get_session(self, session_id):
-        player = self.get_player(session_id)
-        game = self.get_game(player.game_id)
-        return player, game
+    def sleep(self, seconds):
+        self.socketio.sleep(seconds)
 
-    def remove_game(self, game_id):
-        if game_id in self.games:
-            del self.games[game_id]
-
-    def register_player(self, session_id):
-        player = BlackjackPlayer('player', session_id, 5000)
-        self.players[session_id] = player
-        return player
-
-    def get_player(self, session_id):
-        player = self.players.get(session_id)
-        if not player:
-            player = self.register_player(session_id)
-        return player
-
+    def message(self, key, data, to=None):
+        if to:
+            self.socketio.emit(key, data, to=to)
+        else:
+            self.socketio.emit(key, data)
