@@ -10,13 +10,17 @@ def hand_value(cards):
     num_aces = 0
     for card in cards:
         card_value = card[1:]
-        if card_value in ['J', 'Q', 'K', 'T']:
-            value += 10
-        elif card_value == 'A':
-            num_aces += 1
-            value += 11
+        rank = card[:1]
+        if rank == 'B':
+            continue
         else:
-            value += int(card_value)
+            if card_value in ['J', 'Q', 'K', 'T']:
+                value += 10
+            elif card_value == 'A':
+                num_aces += 1
+                value += 11
+            else:
+                value += int(card_value)
 
     while value > 21 and num_aces:
         value -= 10
