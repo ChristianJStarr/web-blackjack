@@ -149,10 +149,13 @@ class BlackJackGame:
         self.deck = BlackJackDeck()
         self.dealer = BlackJackDealer()
         self.seats = [BlackJackSeat(seat) for seat in range(1, seat_count+1)]
-        self.actions = ['stand', 'hit']
+        self.actions = ['repeat bet']
+        self.chips = [1,5,25,50,100,500]
+        self.bets = {}
         self.message_text = ''
         self.loop_running = False
         self.turn = 0
+        self.message_time = 0
         self.db_session = None
 
 
@@ -223,6 +226,8 @@ class BlackJackGame:
         self.next_turn()
         self.state_updated()
 
+        self.bets = {seat.player.id: seat.bet for seat in self.seats if seat.player is not None}
+
         return True
 
     def dealers_turn(self):
@@ -237,18 +242,17 @@ class BlackJackGame:
             self.sleep(1)
     def end_round(self):
         dealer_value = self.dealer.hand_value
+        if self.dealer.is_blackjack:
+            self.dealer.history.append('BJ')
+        elif dealer_value > 21:
+            self.dealer.history.append('B')
+        else:
+            self.dealer.history.append(dealer_value)
+
         for seat in self.seats:
-            if not seat.player:
+            if not seat.player or not seat.cards:
                 continue
             player = seat.player
-
-            if self.dealer.is_blackjack:
-                self.dealer.history.append('BJ')
-            elif dealer_value > 21:
-                self.dealer.history.append('B')
-            else:
-                self.dealer.history.append(dealer_value)
-
 
             player = self.db_session.query(BlackjackPlayer).get(player.id)
             player_value = seat.hand_value
@@ -304,11 +308,10 @@ class BlackJackGame:
             error = 'Unable to find seat'
             return success, error
 
-        if seat.id != self.turn:
+        if seat.id != self.turn and action != 'repeat bet':
             error = 'Not players turn'
             return success, error
-
-        if action not in self.actions:
+        if action not in self.get_actions():
             error = 'Invalid action'
             return success, error
 
@@ -338,6 +341,12 @@ class BlackJackGame:
         elif action == 'split':
             # Split logic here
             pass
+
+        elif action == 'repeat bet':
+            prev_bet = self.bets.get(player.id)
+            if prev_bet:
+                self.player_bet(player, prev_bet)
+
         else:
             return 'Invalid action'
 
@@ -389,8 +398,11 @@ class BlackJackGame:
     def get_actions(self):
         possible_actions = []
         actions = ['hit', 'stand', 'double']
-        if self.turn != 0 and self.turn != self.seat_count + 1:
+        if self.turn == 0:
+            possible_actions = ['repeat bet']
+        elif self.turn != 0 and self.turn != self.seat_count + 1:
             possible_actions = actions
+
         return possible_actions
 
 
@@ -400,6 +412,7 @@ class BlackJackGame:
     def wait_for_bets(self):
         try:
             self.message_text = 'Place your bets'
+            self.message_time = self.BET_TIME
             self.state_updated()
             for x in range(1, self.BET_TIME + 1):
                 if sum([1 if seat.bet else 0 for seat in self.seats]) == self.player_count():
@@ -409,6 +422,7 @@ class BlackJackGame:
                 self.sleep()
         finally:
             self.message_text = 'Bets closed'
+            self.message_time = 0
             self.state_updated()
             self.sleep()
             self.message_text = ''
@@ -455,9 +469,10 @@ class BlackJackGame:
             'seats': [seat.state for seat in self.seats],
             'dealer': self.dealer.state,
             'turn': self.turn,
-            'actions': self.actions,
-            'chips': [1,5,25,50,100,500],
+            'actions': self.get_actions(),
+            'chips': self.chips,
             'message': self.message_text,
+            'message_time': self.message_time,
             'shoe': self.deck.state
         }
 
