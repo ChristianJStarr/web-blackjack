@@ -17,14 +17,15 @@ export class Seats {
     }
 
     update(state) {
-        const active_seat = this.table.game.seat_id;
+        const self_seat = this.table.game.seat_id;
+        const active_seat = state?.turn ?? 0;
         const seats_state = state?.seats ? state.seats : [];
         for (const seat_state of seats_state) {
             const seat_id = seat_state.id;
             if (seat_id) {
                 for (const seat of Object.values(this.seats)) {
                     if (seat.id === seat_id) {
-                        seat.update({ active: seat_id === active_seat, ...seat_state });
+                        seat.update({ active: seat_id === active_seat, self: seat_id === self_seat, ...seat_state });
                     }
                 }
             }

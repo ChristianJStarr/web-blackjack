@@ -12,10 +12,14 @@ export class Dealer {
         this.node = createElement('div', 'dealer');
         this.cards_node = createElement('div', 'dealer__cards');
         this.hand_value_node = createElement('div', 'dealer__hand-value');
+        this.pays_node = createElement('div', 'dealer__pays');
+
+        this.pays_node.textContent = 'BLACKJACK PAYS 3 TO 2';
 
         this.node.append(
             this.cards_node,
-            this.hand_value_node
+            this.hand_value_node,
+            this.pays_node
         )
     }
 
