@@ -1,6 +1,5 @@
 .dealer {
   grid-area: dealer;
-  border: solid @border-width darkorange;
   width: 100%;
   align-self: center;
   position: relative;
@@ -10,12 +9,20 @@
     display: flex;
     flex-direction: row-reverse;
     font-size: 0.75em;
-    min-height: @card-height;
+    gap: calc(@u / 2);
+    min-height: calc(@card-height + ((@u / 2) * 2));
+    padding: calc(@u / 2);
+    border: solid @border-width darkorange;
+    border-radius: 5px;
   }
   &__hand-value {
     position: absolute;
     right: -1em;
     top: -1em;
     color: white;
+  }
+  &__pays {
+    text-align: center;
+    color: darkorange;
   }
 }

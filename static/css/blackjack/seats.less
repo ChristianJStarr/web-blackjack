@@ -9,94 +9,236 @@
 }
 
 .seat {
-    width: calc(10% - @border-width - @border-width);
-    aspect-ratio: 1;
-    background-color: rgba(255,255,255,0.2);
-    border: solid @border-width white;
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    height: auto;
+	width: calc(14% - @border-width - @border-width);
+	aspect-ratio: 1;
+	border: solid @border-width transparent;
+	border-radius: 50%;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	height: auto;
+    box-sizing: content-box;
+    transition: border-color ease 0.5s;
 
-    &.-active {
-      border: solid @border-width gold;
-    }
+	&.-active {
+	  border-color: rgba(255, 215, 0, 0.68);
+	}
 
-    &__bet {
-      width: 100%;
-      height: 100%;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      grid-template-rows: 1fr 1fr 1fr;
-      z-index: 2;
-    }
-    &__bet-text {
-      height: 0;
-      position: absolute;
-      bottom: -1.5em;
-      color: white;
-      text-align: center;
-      font-size: 1.2em;
-      right: 0;left: 0;
-    }
-    &__hand-value {
-      position: absolute;
-      left: -1em;
-      bottom: -1em;
-      color: white;
-    }
-    &__player {
-      position: absolute;
-      height: 0;
-      bottom: -0.5em;
-      text-align: center;
-      color: white;
-      right: 0;left: 0;
-    }
-    &__cards {
-      position: absolute;
-      bottom: 100%;
-      flex-direction: column-reverse;
-      order: -1;
-      display: flex;
-      z-index: 1;
-      overflow:visible;
-      right:0;left:0;
-      .card {
-        &:nth-child(2) {
-          transform: translate3d(calc((@card-width * 1) * @card-offset-x), calc((@card-height * 1) * @card-offset-y), 0);
+	&.-self {
+	  .seat__player {
+		&:before {
+		  content: '★';
+		  color: rgba(255, 215, 0, 0.68);
+		  font-size: 0.75em;
+		  line-height: 1em;
+		  padding-right: 0.15em;
+		}
+	  }
+      .seat__bet {
+        &__behind, &__side-l, &__side-r {
+          &:hover {
+            border-color: rgba(255,255,255,0.75) !important;
+
+            &::before,
+            &::after {
+              border-color: rgba(255,255,255,0.75) !important;
+            }
+
+            span {
+              color: rgba(255,255,255,0.75);
+            }
+
+            cursor: pointer;
+          }
+
         }
-        &:nth-child(3) {
-          transform: translate3d(calc((@card-width * 2) * @card-offset-x), calc((@card-height * 2) * @card-offset-y), 0);
-        }
-        &:nth-child(4) {
-          transform: translate3d(calc((@card-width * 3) * @card-offset-x), calc((@card-height * 3) * @card-offset-y), 0);
-        }
-        &:nth-child(5) {
-          transform: translate3d(calc((@card-width * 4) * @card-offset-x), calc((@card-height * 4) * @card-offset-y), 0);
-        }
-        &:nth-child(6) {
-          transform: translate3d(calc((@card-width * 5) * @card-offset-x), calc((@card-height * 5) * @card-offset-y), 0);
-        }
-        &:nth-child(7) {
-          transform: translate3d(calc((@card-width * 6) * @card-offset-x), calc((@card-height * 6) * @card-offset-y), 0);
-        }
-        &:nth-child(8) {
-          transform: translate3d(calc((@card-width * 7) * @card-offset-x), calc((@card-height * 7) * @card-offset-y), 0);
-        }
-        &:nth-child(9) {
-          transform: translate3d(calc((@card-width * 8) * @card-offset-x), calc((@card-height * 8) * @card-offset-y), 0);
-        }
-        &:nth-child(10) {
-          transform: translate3d(calc((@card-width * 9) * @card-offset-x), calc((@card-height * 9) * @card-offset-y), 0);
-        }
-        &:nth-child(11) {
-          transform: translate3d(calc((@card-width * 10) * @card-offset-x), calc((@card-height * 10) * @card-offset-y), 0);
-        }
-        &:nth-child(12) {
-          transform: translate3d(calc((@card-width * 12) * @card-offset-x), calc((@card-height * 11) * @card-offset-y), 0);
+        &__center__bet {
+          &:hover {
+            border-color: rgba(255,255,255,0.75) !important;
+
+            &::before,
+            &::after {
+              border-color: rgba(255,255,255,0.75) !important;
+            }
+
+            span {
+              color: rgba(255,255,255,0.75);
+            }
+
+            cursor: pointer;
+          }
         }
       }
-    }
-  }
+	}
+
+	&__bet {
+	  width: 100%;
+	  height: 100%;
+	  position: relative;
+	  z-index: 2;
+
+	  &__behind, &__side-l, &__side-r {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
+		background-color: transparent;
+		clip-path: polygon(50% 50%, 100% 50%, 100% 100%, 50% 100%);
+		border: 5px solid @table-bg;
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+
+		&__text {
+		  padding-top: 85%;
+		  font-weight: bold;
+		  color: white;
+		  transform: rotate(-45deg);
+
+          svg {
+            width: 100%;
+            opacity: 0.75;
+          }
+		}
+
+		&::before,
+		&::after {
+		  content: '';
+		  position: absolute;
+		  border-radius: 50%;
+		}
+
+		&::before {
+		  top: 50%;
+		  left: 50%;
+		  right: -5px;
+		  bottom: -5px;
+		  border: 5px solid @table-bg;
+		  border-radius: 50% 0 0 0;
+		}
+
+		&::after {
+		  width: 50%;
+		  height: 50%;
+		  border: 6px solid @table-bg;
+		}
+
+        transform: rotate(45deg);
+        &:nth-child(2) {
+          transform: rotate(135deg);
+        }
+
+        &:nth-child(3) {
+          transform: rotate(315deg);
+        }
+
+        &::before {
+          background: rgba(255, 255, 255, 0.2);
+        }
+
+	  }
+
+	  &__center {
+		position: absolute;
+		inset: 25%;
+		background-color: @table-bg;
+		border-radius: 50%;
+		z-index: 2;
+        display: grid;
+
+		&__bet {
+		  background: rgba(255, 255, 255, 0.2);
+		  position: absolute;
+		  inset: 0;
+		  border-radius: 50%;
+		  border: 5px solid @table-bg;
+		  display: flex;
+		  align-items: center;
+		  justify-content: center;
+		}
+        &__text {
+          text-align: center;
+          align-self: center;
+          color: rgba(255, 255, 255, 0.73);
+          padding-top: 0.2em;
+        }
+	  }
+	}
+	&__bet-text {
+	  height: 0;
+	  position: absolute;
+	  bottom: -1.5em;
+	  color: white;
+	  text-align: center;
+	  font-size: 1.2em;
+	  right: 0;left: 0;
+	}
+	&__hand-value {
+	  position: absolute;
+	  left: -1em;
+	  bottom: -1em;
+	  color: white;
+	}
+	&__player {
+	  position: absolute;
+	  height: 0;
+	  bottom: -1em;
+	  text-align: center;
+	  color: white;
+	  right: 0;left: 0;
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	  white-space: nowrap;
+	}
+	&__cards {
+	  position: absolute;
+	  bottom: 100%;
+	  flex-direction: column-reverse;
+	  order: -1;
+	  display: flex;
+	  z-index: 1;
+	  overflow:visible;
+	  right:0;left:0;
+	  .card {
+		&:nth-child(2) {
+		  transform: translate3d(calc((@card-width * 1) * @card-offset-x), calc((@card-height * 1) * @card-offset-y), 0);
+		}
+		&:nth-child(3) {
+		  transform: translate3d(calc((@card-width * 2) * @card-offset-x), calc((@card-height * 2) * @card-offset-y), 0);
+		}
+		&:nth-child(4) {
+		  transform: translate3d(calc((@card-width * 3) * @card-offset-x), calc((@card-height * 3) * @card-offset-y), 0);
+		}
+		&:nth-child(5) {
+		  transform: translate3d(calc((@card-width * 4) * @card-offset-x), calc((@card-height * 4) * @card-offset-y), 0);
+		}
+		&:nth-child(6) {
+		  transform: translate3d(calc((@card-width * 5) * @card-offset-x), calc((@card-height * 5) * @card-offset-y), 0);
+		}
+		&:nth-child(7) {
+		  transform: translate3d(calc((@card-width * 6) * @card-offset-x), calc((@card-height * 6) * @card-offset-y), 0);
+		}
+		&:nth-child(8) {
+		  transform: translate3d(calc((@card-width * 7) * @card-offset-x), calc((@card-height * 7) * @card-offset-y), 0);
+		}
+		&:nth-child(9) {
+		  transform: translate3d(calc((@card-width * 8) * @card-offset-x), calc((@card-height * 8) * @card-offset-y), 0);
+		}
+		&:nth-child(10) {
+		  transform: translate3d(calc((@card-width * 9) * @card-offset-x), calc((@card-height * 9) * @card-offset-y), 0);
+		}
+		&:nth-child(11) {
+		  transform: translate3d(calc((@card-width * 10) * @card-offset-x), calc((@card-height * 10) * @card-offset-y), 0);
+		}
+		&:nth-child(12) {
+		  transform: translate3d(calc((@card-width * 12) * @card-offset-x), calc((@card-height * 11) * @card-offset-y), 0);
+		}
+	  }
+	}
+}
+
+
+
