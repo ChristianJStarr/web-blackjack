@@ -51,8 +51,8 @@
             </div>
             <form action="/signup?ref={{ url_for(request.endpoint, **request.view_args) }}" method="POST">
                 <label for="guest_name">Display Name</label>
-                <input type="text" id="guest_name" name="name" value="Guest1">
-                <input type="text" id="signup_username" name="username" value="player1" hidden>
+                <input type="text" id="guest_name" name="name" value="" placeholder="...">
+                <input type="text" id="signup_username" name="username" value="player5" hidden>
                 <input type="text" id="signup_password2" name="password" value="password" hidden>
                 <input type="text" id="signup_password2" name="password2" value="password" hidden>
                 <input type="submit" value="Continue">

@@ -53,7 +53,7 @@ def game(game_id):
 
     return render_template('game.html',
                            game=game,
-                           user_required=True,
+                           player_required=True,
                            player=player,
         leaderboard=get_leaderboard())
 @app.route('/privacy')
@@ -241,5 +241,5 @@ def handle_player_bet(data):
 
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, allow_unsafe_werkzeug=True)
+    socketio.run(app, debug=True, host='0.0.0.0', allow_unsafe_werkzeug=True)
 
