@@ -1,4 +1,4 @@
-from flask import current_app
+import json
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import scoped_session, sessionmaker
 
@@ -26,8 +26,29 @@ def get_scoped_session():
         raise RuntimeError("Scoped session not initialized.")
     return get_session()
 
+class Game(db.Model):
+    __tablename__ = 'games'
 
-class BlackjackPlayer(db.Model):
+    id = db.Column(db.String(4), primary_key=True, nullable=False)
+    state_json = db.Column(db.String(5000), nullable=False)
+
+    @property
+    def state(self):
+        try:
+            return json.loads(self.state_json)
+        except:
+            return {}
+
+    @state.setter
+    def state(self, state):
+        if not state:
+            state = {'id': self.id}
+        self.state_json = json.dumps(state)
+
+    def __repr__(self):
+        return f'<Game {self.id}>'
+
+class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
@@ -38,36 +59,6 @@ class BlackjackPlayer(db.Model):
     game_id = db.Column(db.String(50), nullable=False)
     sid = db.Column(db.String(255), unique=True, nullable=True)
 
-    def can_bet(self, amount):
-        return self.balance >= amount
-
-    def add_funds(self, amount):
-        session = get_scoped_session()
-        try:
-            self.balance += amount
-            session.commit()
-        except Exception as e:
-            session.rollback()
-            print(f"Error adding funds: {e}")
-
-    def remove_funds(self, amount):
-        session = get_scoped_session()
-        try:
-            if self.can_bet(amount):
-                self.balance -= amount
-                session.commit()
-            else:
-                print(f"Player {self.id} cannot bet {amount}.")
-        except Exception as e:
-            session.rollback()
-            print(f"Error removing funds: {e}")
-
     def __repr__(self):
-        return f'<BlackjackPlayer {self.username}>'
+        return f'<User {self.id}>'
 
-    @property
-    def state(self):
-        return {
-            'name': self.name,
-            'id': self.id,
-        }
