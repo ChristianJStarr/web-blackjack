@@ -52,31 +52,34 @@ export class Message {
         this.temp_timeout = setTimeout(() => {
             if (this.temp_message === message) {
                 this.temp_message = '';
-                this.setMessage(this.temp_message);
+                this.setMessage(this.message);
             }
         }, time);
     }
 
     setMessage(message, message_time=0) {
-        this.text_node.textContent = message;
-        this.progress_node.style = `--progress: 0%`;
-        this.message = message;
-
-        if(message_time) {
-            message_time *= 1000;
-            if(this.progress_interval) {
-                clearInterval(this.progress_interval);
-            }
-            let progress = 100;
-            this.progress_node.style = `transition: width ease 0s;--progress: ${progress}%`;
-
-            this.progress_interval = setInterval(() => {
-                progress -= 1;
-                this.progress_node.style = `transition: width ease 1s;--progress: ${progress}%`;
-                if(progress <= 0) {
+        if(!this.temp_message || message) {
+            this.message = message;
+            this.text_node.textContent = message;
+            this.progress_node.style = `--progress: 0%`;
+            if(message_time) {
+                message_time *= 1000;
+                if(this.progress_interval) {
                     clearInterval(this.progress_interval);
                 }
-            }, message_time / 100)
+                let progress = 100;
+                this.progress_node.style = `transition: width ease 0s;--progress: ${progress}%`;
+
+                this.progress_interval = setInterval(() => {
+                    progress -= 1;
+                    this.progress_node.style = `transition: width ease 1s;--progress: ${progress}%`;
+                    if(progress <= 0) {
+                        clearInterval(this.progress_interval);
+                    }
+                }, message_time / 100)
+            }
+        }else if(this.temp_message) {
+            this.message = message;
         }
     }
 }
