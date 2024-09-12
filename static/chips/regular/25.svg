@@ -1,13 +1,25 @@
 <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-  <!-- Outer Circle (Chip Border) -->
-  <circle cx="50" cy="50" r="45" stroke="green" stroke-width="10" fill="none" />
+  <!-- Outer Circle (Multi-colored segments) -->
+  <circle cx="50" cy="50" r="45" fill="#008000" stroke="none" />
+  <path d="M50 5 A 45 45 0 0 1 85 25 L 50 50 Z" fill="#ffffff" />
+  <path d="M50 5 A 45 45 0 0 0 15 25 L 50 50 Z" fill="#006400" />
+  <path d="M50 95 A 45 45 0 0 1 85 75 L 50 50 Z" fill="#ffffff" />
+  <path d="M50 95 A 45 45 0 0 0 15 75 L 50 50 Z" fill="#006400" />
 
   <!-- Inner Circle (Chip Background) -->
-  <circle cx="50" cy="50" r="40" stroke="#b7893a" stroke-width="2" fill="green" />
+  <circle cx="50" cy="50" r="40" fill="#f5f5f5" />
 
-  <!-- Inner Circle (Chip Center) -->
-  <circle cx="50" cy="50" r="30" stroke="grey" stroke-width="2" fill="#3d3d3d" />
+  <!-- Center Circle -->
+  <circle cx="50" cy="50" r="30" fill="#ffffff" />
+
+  <!-- Embossed Text Around -->
+  <text x="50%" y="35%" font-size="8" text-anchor="middle" fill="rgba(0,0,0,0.1)">BLACKJACKGAME</text>
+  <text x="50%" y="87%" font-size="8" text-anchor="middle" fill="rgba(0,0,0,0.1)">LAS VEGAS</text>
 
   <!-- Price Text -->
-  <text x="50%" y="50%" font-size="20" text-anchor="middle" fill="#fff" dy=".3em">25</text>
+  <text x="50%" y="50%" font-size="22" text-anchor="middle" fill="#006400" font-weight="bold" dy=".3em">$25</text>
+
+  <!-- Additional Details -->
+  <text x="50%" y="65%" font-size="5" text-anchor="middle" fill="#000">BLACKJACK GAME</text>
+  <text x="50%" y="72%" font-size="3" text-anchor="middle" fill="#000">LAS VEGAS, NEVADA</text>
 </svg>
