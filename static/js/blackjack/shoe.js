@@ -22,9 +22,10 @@ export class Shoe {
     update(state) {
         const cards = state?.shoe?.cards ?? [];
         const card_count = state?.shoe?.card_count ?? 0;
+        const deck_cut = state?.shoe?.deck_cut ?? 0;
 
         if(cards !== this.cards) {
-            this.setCards(cards);
+            this.setCards(cards, deck_cut);
         }
         if(card_count !== this.card_count) {
             this.setLabel(card_count)
@@ -32,13 +33,13 @@ export class Shoe {
     }
 
 
-    setCards(cards) {
+    setCards(cards, deck_cut) {
         if(cards) {
             this.cards_node.replaceChildren();
             for (const [index, card] of cards.entries()) {
                 const card_node = createElement('div', `shoe__card`);
 
-                if(index === cards.length - 20) {
+                if(index === deck_cut) {
                     card_node.classList.add('-cut')
                 }
 
