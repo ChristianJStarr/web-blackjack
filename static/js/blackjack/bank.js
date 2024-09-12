@@ -11,26 +11,42 @@ export class Bank {
 
         this.node = createElement('div', 'bank');
         this.chips_node = createElement('div', 'bank__chips');
+
+        this.balance_wrapper_node = createElement('div', 'bank__balance-wrapper');
         this.balance_node = createElement('div', 'bank__balance');
+        this.balance_change_node = createElement('div', 'bank__balance-change');
 
         this.header_balance = document.querySelector('.header__balance');
 
-        this.balance_node.textContent = `$${this.balance}`;
+        this.balance_wrapper_node.append(
+            this.balance_node,
+            this.balance_change_node
+        );
 
         this.node.append(
             this.chips_node,
-            this.balance_node
+            this.balance_wrapper_node
         );
 
         this.debounceTimeout = null;
-        this.debounceDelay = 300;
+        this.debounceDelay = 100;
         this.pendingBetAmount = null;
     }
 
     updateBalance(balance) {
-        this.balance_node.textContent = `$${this.balance}`;
+        this.balance_node.textContent = `$${balance}`;
         if (this.header_balance) {
-            this.header_balance.textContent = `$${this.balance}`;
+            this.header_balance.textContent = `$${balance}`;
+        }
+
+        const change = balance - this.balance;
+        if (this.balance && change) {
+            this.balance_change_node.textContent = `${change > 0 ? '+':''}${change}`;
+            this.balance_change_node.classList.add(change > 0 ? '-increase' : '-decrease');
+            setTimeout(()=>{
+                this.balance_change_node.classList.remove(change > 0 ? '-increase' : '-decrease');
+                this.balance_change_node.textContent = ``;
+            }, 1000);
         }
         this.balance = balance;
     }
@@ -41,6 +57,7 @@ export class Bank {
 
             chip_object.node.onclick = this.debounce(() => {
                 this.pendingBetAmount += chip_value;
+                this.table.sound('chip');
                 this.processBet();
             }, this.debounceDelay);
             this.chips_node.append(chip_object.node)
@@ -50,7 +67,7 @@ export class Bank {
 
     processBet() {
         if (this.pendingBetAmount !== null) {
-            this.table.action('player_bet', { amount: this.pendingBetAmount });
+            this.table.action('player_bet', this.pendingBetAmount);
             this.pendingBetAmount = null;
         }
     }
@@ -67,7 +84,14 @@ export class Bank {
     update(state) {
 
         const chips = state?.chips ?? [];
-        const balance = state?.balance ?? 0;
+        const seats = state?.seats ?? [];
+
+        let balance = 0;
+        for (const seat of seats) {
+            if(this.table.game.seat_id === seat.id) {
+                balance = seat.player.balance;
+            }
+        }
 
         chips.sort((a, b) => a - b);
 
