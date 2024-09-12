@@ -1,7 +1,7 @@
 import unittest
 import uuid
 import blackjack as bj
-import utility as u
+from blackjack import utility as u
 
 
 class TestBlackjack(unittest.TestCase):
