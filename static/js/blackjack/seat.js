@@ -143,11 +143,13 @@ export class Seat {
                 if (this.cards[index]) {
                     if(this.cards[index] !== card) {
                         this.card_objects[index].reset(card);
+                        this.table.sound('card');
                     }
                 } else {
                     const card_object = new Card(card);
                     this.cards_node.appendChild(card_object.node);
                     this.card_objects.push(card_object);
+                    this.table.sound('card');
                 }
             }
         } else {
