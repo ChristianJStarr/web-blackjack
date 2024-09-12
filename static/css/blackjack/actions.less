@@ -1,30 +1,70 @@
 
 
-.actions {
-  grid-area: actions;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 10px;
-  align-content: center;
+@button-color: lighten(@table-bg, 15%);
+@button-text-color: lighten(@table-bg, 85%);
 
-  .action {
-    flex: 1;
-    outline: none;
-    appearance: none;
-    border: solid @border-width white;
-    background-color: rgba(255,255,255,0.25);
+.actions {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: @u;
+  background: fade(darken(@table-bg, 5%), 85%);
+  z-index: 200;
+  border-radius: @u @u 0 0;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  gap: @u;
+  transition: opacity ease 0.25s, transform ease 0.25s;
+  opacity: 0;
+
+  &.-is_turn {
+    transition: transform ease 1s;
+    transform: translateY(0%);
+    opacity: 1;
+  }
+
+  &__timer {
+    width: 100%;
+    height: @u;
+    background: fade(lighten(@table-bg, 5%), 85%);
     border-radius: @border-radius;
-    font-size: @font-size-sm;
-    font-weight: bold;
+    overflow: hidden;
+    position: relative;
+
+    &:before {
+      content: '';
+      position: absolute;
+      inset: 0 auto 0 0;
+      background-color: white;
+      width: var(--time);
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: @u;
+    flex-wrap: wrap;
+  }
+
+  &__button {
+    outline: none;
+    flex: 1;
+    appearance: none;
+    border: solid @border-width @button-color;
+    background-color: @button-color;
+    border-radius: @border-radius;
+    font-size: @font-size-md;
+    padding: 0.15em @u 0 @u;
     text-transform: uppercase;
-    padding: @padding;
-    color: white;
+    transition: transform ease 0.25s, border-color ease 0.25s;
+    color: @button-text-color;
     cursor: pointer;
 
     &:hover {
-      background-color: rgba(200,200,200,0.25);
-      transform: scale(1.05);
+      transform: scale(1.025);
+      border-color: lighten(@button-color,20%);
     }
   }
 

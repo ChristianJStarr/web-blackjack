@@ -10,16 +10,34 @@
           "history dealer shoe"
           "message message message"
           "seats seats seats"
-          ". bank actions";
+          "control bank .";
   gap: @padding-md;
   padding: @padding-md;
   width:100%;
   aspect-ratio: 1.6;
+  position: relative;
   background: @table-bg;
+  overflow: hidden;
   * {
     user-select: none;
   }
   font-size: clamp(10px, 2vw, 30px);
+
+  .loading {
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(10px);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    font-size: @font-size-md;
+    color: white;
+    text-transform: uppercase;
+    display: none;
+    &.-show {
+      display: flex;
+    }
+  }
 }
 
 @media (max-width: 1100px) {

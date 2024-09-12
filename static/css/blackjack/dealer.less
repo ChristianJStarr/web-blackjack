@@ -25,4 +25,14 @@
     text-align: center;
     color: darkorange;
   }
+
+  .card {
+    position: relative;
+    transition: margin-top ease 1s;
+    margin-top: 0;
+
+    &.-checking {
+      margin-top: calc(@u * -2);
+    }
+  }
 }

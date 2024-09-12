@@ -1,0 +1,40 @@
+
+
+.control {
+  align-self:end;
+  display: flex;
+  justify-content: start;
+
+  &__audio {
+    background-color: lighten(@table-bg, 15%);
+    align-items: center;
+    display: flex;
+    cursor: pointer;
+    border-radius: @u;
+    padding: 0.15em @u 0 @u;
+    font-size: @font-size-sm;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+    color: lighten(@table-bg, 45%);
+
+    &:before {
+      color: red;
+      content: 'X';
+      padding-top: 0.1em;
+      position: absolute;
+      margin: 0 auto;
+      text-align: center;
+      font-size: 5em;
+      opacity: 0.25;
+      font-weight: 100;
+    }
+    &.-enabled {
+      color: lighten(@table-bg, 75%);
+      &:before {
+        color: #ffffff;
+        content: ' ';
+      }
+    }
+  }
+}

@@ -13,8 +13,14 @@
     justify-content: space-evenly;
     font-size: 4em;
     padding: @u;
-    border: solid @border-width white;
+    background-color: lighten(@table-bg, 10%);
     border-radius: 5px;
+  }
+  .chip {
+    transition: transform ease 0.25s;
+    &:hover {
+      transform: scale(1.2);
+    }
   }
   &__text {
     display: flex;
@@ -31,10 +37,37 @@
       font-size: 1.4em;
     }
   }
+  &__balance-wrapper {
+    padding-top: @u;
+    position: relative;
+    order: -1;
+  }
   &__balance {
     color: white;
     font-size: @font-size-md;
-    padding-top: @u;
+  }
+  &__balance-change {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    color: white;
+    font-size: @font-size-md;
+    transition: bottom ease 1s, opacity ease 1s;
+    opacity: 1;
+
+    &.-increase, &.-decrease {
+      position: absolute;
+    }
+    &.-increase {
+      bottom: 50%;
+      opacity: 0;
+      color: green;
+    }
+    &.-decrease {
+      bottom: -50%;
+      opacity: 0;
+      color: red;
+    }
   }
 }
 
