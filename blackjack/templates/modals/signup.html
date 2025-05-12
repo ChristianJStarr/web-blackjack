@@ -1,0 +1,44 @@
+{% extends 'modal.html' %}
+
+{% block title %}
+    Create an Account
+{% endblock %}
+
+{% block content %}
+    <form id="signup-form">
+        <input type="hidden" name="type" value="signup">
+        <label for="name">Display Name</label>
+        <input type="text" id="name" name="name">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username">
+        <label for="password">Password</label>
+        <input type="text" id="password" name="password">
+        <label for="password_2">Repeat Password</label>
+        <input type="text" id="password_2" name="password_2">
+        <p>
+            By clicking Create Account, you agree to our
+            <a href="/terms">Terms of Service</a>
+            and
+            <a href="/privacy">Privacy Policy</a>
+            .
+        </p>
+        <input type="submit" value="Create Account">
+    </form>
+    <a onclick="window.modal.show('login')">Log In</a>
+    <a onclick="window.modal.show('guest')">Continue as Guest</a>
+    <script>
+        const signup_form = document.querySelector('#signup-form');
+        signup_form.onsubmit = event => {
+            event.preventDefault();
+            const formData = new FormData(signup_form);
+            fetch('/auth', {method: 'POST',body: formData
+            }).then(response => response.json()).then(data => {
+                if(data?.success) {
+                    localStorage.setItem('user_id',data?.user_id);
+                    window.location.reload()
+                }
+            });
+        }
+    </script>
+{% endblock %}
+

@@ -1,0 +1,196 @@
+{% extends 'modal.html' %}
+
+{% block title %}
+    Create a New Table
+{% endblock %}
+
+{% block content %}
+    <div class="create-table">
+        <div class="create-table__form-wrapper">
+            <form class="create-table__form">
+
+                <div class="create-table__field">
+                    <label class="create-table__label" for="table_game_id">Game ID</label>
+                    <input class="create-table__input" id="table_game_id" type="text" name="game_id" value="{{ request.host }}/game/abcd" readonly>
+                    <span class="create-table__input-copy">[copy]</span>
+                </div>
+
+                <div class="create-table__field-row">
+                    <div class="create-table__field">
+                        <label class="create-table__label" for="table_seat_count">Seat Count</label>
+                        <input class="create-table__input" id="table_seat_count" type="number" name="seat_count" value="6" min="2" max="10">
+
+                    </div>
+
+                    <div class="create-table__field">
+                        <label class="create-table__label" for="table_deck_count">Deck Count</label>
+                        <input class="create-table__input" id="table_deck_count" type="number" name="deck_count" value="4" min="1" max="20">
+                    </div>
+                </div>
+
+
+
+                <div class="create-table__field-row">
+                    <div class="create-table__field">
+                        <label class="create-table__label" for="table_game_id">Dealer Speed</label>
+                        <select class="create-table__select" name="game_speed" id="table_game_speed">
+                            <option value="regular">Regular</option>
+                            <option value="1.5X">1.5X</option>
+                            <option value="2X">2X</option>
+                            <option value="3X">3X</option>
+                            <option value="4X">4X</option>
+                        </select>
+                    </div>
+                    <div class="create-table__field">
+                        <label class="create-table__label" for="table_bet_time">Bet Time</label>
+                        <select class="create-table__select" name="bet_time" id="table_bet_time">
+                            <option value="5">5s</option>
+                            <option value="10">10s</option>
+                            <option value="20">20s</option>
+                            <option value="30">30s</option>
+                            <option value="60">60s</option>
+                        </select>
+                    </div>
+                    <div class="create-table__field">
+                        <label class="create-table__label" for="table_decision_time">Decision Time</label>
+                        <select class="create-table__select" name="decision_time" id="table_decision_time">
+                            <option value="5">5s</option>
+                            <option value="10">10s</option>
+                            <option value="20">20s</option>
+                            <option value="30">30s</option>
+                            <option value="60">60s</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="create-table__field-row">
+                    <div class="create-table__field">
+                        <label class="create-table__label" for="table_blackjack_pay">Blackjack Pay</label>
+                        <select class="create-table__select" name="blackjack_pay" id="table_blackjack_pay">
+                            <option value="32">3:2</option>
+                            <option value="65">6:5</option>
+                        </select>
+                    </div>
+                    <div class="create-table__field">
+                        <label class="create-table__label" for="table_insurance">Insurance</label>
+                        <input class="create-table__input create-table__checkbox" id="table_insurance" type="checkbox" name="insurance">
+                        <label class="create-table__checkbox-text" for="table_insurance"></label>
+                    </div>
+                    <div class="create-table__field">
+                        <label class="create-table__label" for="table_surrender">Surrender</label>
+                        <input class="create-table__input create-table__checkbox" id="table_surrender" type="checkbox" name="surrender">
+                        <label class="create-table__checkbox-text" for="table_surrender"></label>
+                    </div>
+                </div>
+
+                <div class="create-table__field-row">
+                    <div class="create-table__field">
+                        <label class="create-table__label" for="table_left_side_bet">Left Side Bet</label>
+                        <select class="create-table__select" name="left_side_bet" id="table_left_side_bet">
+                            <option value="none">None</option>
+                            <option value="perfect-pairs">Perfect Pairs</option>
+                            <option value="21-3">21+3</option>
+                            <option value="royal-match">Royal Match</option>
+                            <option value="lucky-ladies">Lucky Ladies</option>
+                            <option value="super-sevens">Super Sevens</option>
+                            <option value="over-under-13">Over/Under 13</option>
+                            <option value="lucky-lucky">Lucky Lucky</option>
+                            <option value="hot-3">Hot 3</option>
+                            <option value="buster-blackjack">Buster Blackjack</option>
+                            <option value="bust-it">Bust It</option>
+                            <option value="hi-lo">Hi-Lo</option>
+                            <option value="bet-the-set">Bet the Set</option>
+                            <option value="top-3">Top 3</option>
+                            <option value="lucky-7s">Lucky 7s</option>
+                            <option value="dealer-bust">Dealer Bust</option>
+                            <option value="match-the-dealer">Match the Dealer</option>
+                            <option value="kill-card">Kill Card</option>
+                            <option value="red-black">Red/Black</option>
+                            <option value="triple-match">Triple Match</option>
+                            <option value="any-pair">Any Pair</option>
+                        </select>
+                    </div>
+                    <div class="create-table__field">
+                        <label class="create-table__label" for="table_right_side_bet">Right Side Bet</label>
+                        <select class="create-table__select" name="right_side_bet" id="table_right_side_bet">
+                            <option value="none">None</option>
+                            <option value="perfect-pairs">Perfect Pairs</option>
+                            <option value="21-3">21+3</option>
+                            <option value="royal-match">Royal Match</option>
+                            <option value="lucky-ladies">Lucky Ladies</option>
+                            <option value="super-sevens">Super Sevens</option>
+                            <option value="over-under-13">Over/Under 13</option>
+                            <option value="lucky-lucky">Lucky Lucky</option>
+                            <option value="hot-3">Hot 3</option>
+                            <option value="buster-blackjack">Buster Blackjack</option>
+                            <option value="bust-it">Bust It</option>
+                            <option value="hi-lo">Hi-Lo</option>
+                            <option value="bet-the-set">Bet the Set</option>
+                            <option value="top-3">Top 3</option>
+                            <option value="lucky-7s">Lucky 7s</option>
+                            <option value="dealer-bust">Dealer Bust</option>
+                            <option value="match-the-dealer">Match the Dealer</option>
+                            <option value="kill-card">Kill Card</option>
+                            <option value="red-black">Red/Black</option>
+                            <option value="triple-match">Triple Match</option>
+                            <option value="any-pair">Any Pair</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="create-table__field">
+                    <label class="create-table__label" for="min_max_bet">Min and Max Bet</label>
+                    <div class="create-table__bet-slider" id="bet_slider"></div>
+                    <div class="create-table__bet-values">
+                        <span id="min_bet_value">Min Bet: $50</span>
+                        <span id="max_bet_value">Max Bet: $500</span>
+                    </div>
+                    <input type="hidden" id="min_bet" name="min_bet" value="50">
+                    <input type="hidden" id="max_bet" name="max_bet" value="500">
+                </div>
+
+                <input class="create-table__submit" type="submit" id="submit" name="submit" value="create table & start game">
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        var betSlider = document.getElementById('bet_slider');
+        noUiSlider.create(betSlider, {
+            start: [50, 1000],
+            connect: true,
+            step: 50,
+            range: {
+                'min': [1],
+                '5%': [5, 4],
+                '10%': [25, 20],
+                '20%': [50, 25],
+                '30%': [100, 50],
+                '40%': [500, 500],
+                '50%': [1000, 500],
+                '60%': [5000, 5000],
+                '70%': [10000, 5000],
+                '80%': [25000, 5000],
+                '90%': [50000, 25000],
+                'max': [100000]
+            },
+        });
+
+        var minBetValue = document.getElementById('min_bet_value');
+        var maxBetValue = document.getElementById('max_bet_value');
+        var minBetInput = document.getElementById('min_bet');
+        var maxBetInput = document.getElementById('max_bet');
+
+        betSlider.noUiSlider.on('update', function(values, handle) {
+        var minBet = Math.round(values[0]);
+        var maxBet = Math.round(values[1]);
+
+        minBetValue.textContent = "Min Bet: $" + minBet;
+        maxBetValue.textContent = "Max Bet: $" + maxBet;
+
+        minBetInput.value = minBet;
+        maxBetInput.value = maxBet;
+    });
+    </script>
+{% endblock %}

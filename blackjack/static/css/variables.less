@@ -1,0 +1,35 @@
+@u: calc(clamp(500px, 100vw,1200px) / 100);
+
+@border-width: calc(@u * 0.2);
+@border-radius: @u;
+@font-size-sm: calc(@u * 2);
+@font-size-md: calc(@u * 3);
+@font-size-lg: calc(@u * 4);
+@padding: @u;
+@padding-md: calc(@u * 2);
+@padding-lg: calc(@u * 5);
+
+@card-aspect: 0.7159;
+@card-height: calc(@u * 7);
+@card-width: calc(@card-height * @card-aspect);
+@card-offset-x: 0.40;
+@card-offset-y: 0.75;
+
+@desktop-max-width: 1200px;
+
+@body-bg: #3f562b;
+@body-bg: #252525;
+
+@table-bg: #2e4d86;
+
+@header-bg-color: darken(@body-bg, 5%);
+@header-text-color: lighten(@header-bg-color, 60%);
+@header-border-color: darken(@header-bg-color, 5%);
+
+
+@footer-bg-color: darken(@body-bg, 5%);
+@footer-text-color: lighten(@header-bg-color, 60%);
+@footer-border-color: darken(@header-bg-color, 5%);
+
+
+@text-color: lighten(@body-bg, 65%);

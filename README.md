@@ -1,75 +1,83 @@
-# Web Blackjack 🃏
+# Web Blackjack (Restructured)
 
-Welcome to **Web Blackjack**, a multiplayer online Blackjack experience! Players can join unique game tables and compete in real-time against others, all through an intuitive web interface.
+A multiplayer online blackjack game built with Flask and Socket.IO.
 
-## Features ✨
+## Project Structure
 
-- **Multiplayer Gameplay**: Join or create unique game tables using Socket.IO for real-time interaction.
-- **Dynamic Game Rooms**: Access unique tables via URLs like `/game/2Qk5` where others can join and play together.
-- **Web Interface**: Sleek and responsive design using HTML, JavaScript, and Less.
-- **Dockerized Setup**: Easily deploy with Docker and Docker Compose.
-- **Live Demo**: Check out the live version at [blackjackgame.site](https://blackjackgame.site).
+The project has been restructured to follow best practices:
 
-## Getting Started 🚀
-
-### Prerequisites
-
-- Python 3.x
-- Docker (optional for containerized deployment)
-
-### Installation
-
-1. **Clone the repo**:
-   ```
-   git clone https://github.com/ChristianJStarr/web-blackjack.git
-   cd web-blackjack
-   ```
-
-2. **Create a virtual environment** (optional but recommended):
-   ```
-   python -m venv venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-   ```
-
-3. **Install dependencies**:
-   ```
-   pip install -r requirements.txt
-   ```
-
-### Running the Application
-
-#### Locally
 ```
-python app.py
+web-blackjack/
+├── blackjack/              # Main package
+│   ├── __init__.py         # Application factory
+│   ├── models/             # Database models
+│   ├── game/               # Game logic
+│   ├── api/                # API routes
+│   ├── web/                # Web routes
+│   ├── auth/               # Authentication
+│   ├── templates/          # Templates
+│   └── static/             # Static files
+├── config.py               # Configuration
+├── requirements.txt        # Dependencies
+└── run.py                  # Application runner
 ```
-Visit `http://localhost:5```` and start a game by navigating to `/game/<your-table-id>`. Share the URL with friends to join the same table.
 
-#### With Docker
+## Setup Instructions
+
+### 1. Create Environment File
+
+Create a `.env` file in the root directory with the following contents:
+
 ```
-docker-compose up --build
+# Flask Configuration
+FLASK_APP=run.py
+FLASK_ENV=development
+SECRET_KEY=your-secure-secret-key
+
+# Database Configuration
+DATABASE_URL=mysql+mysqlconnector://user:password@localhost/blackjack
+DEV_DATABASE_URL=sqlite:///dev-blackjack.db
+TEST_DATABASE_URL=sqlite:///test-blackjack.db
 ```
-The application will be available at `http://localhost:5000`.
 
-## How to Play 🕹️
+### 2. Create Virtual Environment
 
-1. Start a new game by visiting a unique URL like `/game/2Qk5`.
-2. Share the URL with others so they can join your table.
-3. Place your bets, hit, or stand in an attempt to win against the dealer and your friends!
+```bash
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+```
 
-## File Structure 🗂️
+### 3. Install Dependencies
 
-- **blackjack.py**: Core game logic.
-- **bots.py**: AI bot strategies (optional).
-- **app.py**: Flask application with Socket.IO integration.
-- **templates/**: HTML templates.
-- **static/**: Frontend assets (CSS, JavaScript, images).
-- **DockerFile**: Configuration for Docker image.
-- **docker-compose.yml**: Docker Compose setup.
+```bash
+pip install -r requirements.txt
+```
 
-## Contributing 🤝
+### 4. Run Application
 
-Feel free to fork this repository and submit pull requests. Any contributions are welcome!
+```bash
+python run.py
+```
 
-## License 📄
+## API Documentation
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+API documentation is available at `/api/v1/doc` when the application is running.
+
+## Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| FLASK_APP | Application entry point | run.py |
+| FLASK_ENV | Environment (development/production/testing) | development |
+| SECRET_KEY | Secret key for sessions | None (required) |
+| DATABASE_URL | Production database connection string | None (required for production) |
+| DEV_DATABASE_URL | Development database connection string | sqlite:///dev-blackjack.db |
+| TEST_DATABASE_URL | Test database connection string | sqlite:///test-blackjack.db |
+
+## Testing
+
+To run tests:
+
+```bash
+python -m pytest
+``` 

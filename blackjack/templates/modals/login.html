@@ -1,0 +1,39 @@
+{% extends 'modal.html' %}
+
+{% block title %}
+    Log In to Your Account
+{% endblock %}
+
+{% block content %}
+    <form id="login-form">
+        <input type="hidden" name="type" value="login">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password">
+        <p>
+            By clicking Log In, you agree to our
+            <a href="/terms">Terms of Service</a>
+            and
+            <a href="/privacy">Privacy Policy</a>
+            .
+        </p>
+        <input type="submit" value="Log In">
+    </form>
+    <a onclick="window.modal.show('signup')">Create Account</a>
+    <a onclick="window.modal.show('guest')">Continue as Guest</a>
+    <script>
+        const login_form = document.querySelector('#login-form');
+        login_form.onsubmit = event => {
+            event.preventDefault();
+            const formData = new FormData(login_form);
+            fetch('/auth', {method: 'POST',body: formData
+            }).then(response => response.json()).then(data => {
+                if(data?.success) {
+                    localStorage.setItem('user_id',data?.user_id);
+                    window.location.reload()
+                }
+            });
+        }
+    </script>
+{% endblock %}

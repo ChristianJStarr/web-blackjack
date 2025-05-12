@@ -1,0 +1,243 @@
+
+.modal {
+  position: absolute;
+  background-color: rgba(0,0,0,0.45);
+  inset: 0;
+  display: none;
+  z-index: 2000;
+  backdrop-filter: blur(10px);
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+
+  &.-show {
+    display: grid;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+  }
+  &__title {
+    font-size: 1.25em;
+    color: @text-color;
+  }
+  &__close {
+    font-size: 1em;
+    cursor: pointer;
+    color: @text-color;
+  }
+  &__body {
+    display: grid;
+    background: @body-bg;
+    z-index: 2;
+    border-radius: 1rem;
+    padding: 1em;
+    gap: 1em;
+  }
+  &__content {
+    display: grid;
+    gap: 1em;
+  }
+}
+
+.modal.-login,.modal.-signup, .modal.-guest{
+  .modal__body {
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    input[type="text"], input[type="password"] {
+      border: solid 2px grey;
+      border-radius: 0.25em;
+      padding: 0.5em;
+      margin-bottom: 1em;
+    }
+    input[type="submit"] {
+      text-transform: uppercase;
+      color: white;
+      font-size: 1.5em;
+      padding: 0.15em 0 0 0;
+      border-radius: 0.25em;
+      background-color: lighten(@body-bg, 5%);
+      margin-top: 0.5em;
+      cursor: pointer;
+      border-bottom: solid 2px white;
+      transition: transform ease 0.25s, border-color ease 0.25s;
+
+      &:hover {
+        border-bottom: solid 2px darken(@body-bg, 12%);
+        transform: translateY(-2px);
+      }
+    }
+    a{
+      text-transform: uppercase;
+      cursor: pointer;
+      justify-self: start;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+
+
+  }
+  .modal__content {
+    p {
+      font-size: 0.85em;
+
+      a {
+        color: #3d3d3d;
+        background: none;
+        font-size: 1em;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+
+
+.create-table {
+  display: grid;
+  gap: 1em;
+
+  &__preview {
+    display: grid;
+  }
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: stretch;
+  }
+  &__field {
+    box-sizing: border-box;
+    display: flex;
+    position: relative;
+    border: solid @border-width #ababab;
+    border-radius: @border-radius;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  &__field:has(&__input.-copy) &{
+    &__field:after {
+      content: 'copy';
+    }
+  }
+  &__field-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+  }
+  &__field-row &{
+    &__field {
+      flex: 1;
+    }
+  }
+
+
+  &__select {
+    flex: 1;
+    padding: 0.35em 0.65em;
+    background: transparent;
+    color: white;
+    font-size: 1.25em;
+    option {
+      background: @body-bg;
+    }
+  }
+  &__input-copy {
+    padding: 0 1em;
+    color: white;
+  }
+  &__input {
+    flex: 1;
+    padding: 0.35em 0.65em;
+    background: transparent;
+    color: white;
+    font-size: 1.25em;
+  }
+  &__label {
+    position: absolute;
+    inset: -0.5em auto auto 0.5em;
+    line-height: 1em;
+    background-color: @body-bg;
+    border-radius: 25%;
+    color: white;
+    padding: 0 0.25em;
+    text-transform: uppercase;
+  }
+  /* Base styling for the checkbox input */
+  &__checkbox {
+      display: none; /* Hide the default checkbox */
+  }
+
+  /* The text that changes between YES and NO */
+  &__checkbox-text {
+    font-size: 1.25em;
+    font-weight: bold;
+    color: #de3f3f;
+    transition: color 0.3s;
+    text-align: center;
+    cursor: pointer;
+    flex: 1;
+    &:after {
+      content: "NO";
+    }
+  }
+
+  /* Change to green when checked */
+  &__checkbox:checked + &__checkbox-text {
+      &:after {
+        content: 'YES';
+      }
+      color: #3db03d;
+  }
+  &__bet-slider {
+    width: 100%;
+    margin: 1em 1em 0 1em;
+    height: 8px;
+
+    &.noUi-target {
+      background: transparent;
+      height: 8px;
+      box-shadow: none !important;
+    }
+    .noUi-connect {
+        background: linear-gradient(to right, #dedede, #8a8a8a); /* Green gradient */
+        height: 8px;
+        border-radius: 5px;
+    }
+
+    /* Handle style */
+    &.noUi-horizontal .noUi-handle {
+        width: 20px;
+        height: 20px;
+        background-color: white;
+        cursor: pointer;
+    }
+  }
+  &__bet-values {
+    color: white;
+    text-transform: uppercase;
+    text-align: center;
+    flex: 1;
+    padding: 0.5em 0 0.5em 0;
+    display: flex;
+    justify-content: space-evenly;
+  }
+  &__submit {
+    flex: 1;
+    border: solid @border-width lighten(@body-bg, 12%);
+    background: lighten(@body-bg, 12%);
+    border-radius: @border-radius;
+    padding: 0.35em 0.65em;
+    color: white;
+    font-size: 1.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+}

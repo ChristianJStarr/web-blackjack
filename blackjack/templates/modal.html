@@ -1,0 +1,13 @@
+<div class="modal -{{ modal }} -show" data-modal="{{ modal }}">
+    <div class="modal__body">
+        <div class="modal__header">
+            {% block header %}
+                <p class="modal__title">{% block title %}{% endblock %}</p>
+                <span class="modal__close" onclick="window.modal.hide('{{ modal }}')">[close]</span>
+            {% endblock %}
+        </div>
+        <div class="modal__content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</div>

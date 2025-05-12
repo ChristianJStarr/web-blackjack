@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Web Blackjack | Game #{{ game_id }}</title>
+    <link rel="stylesheet" href="/static/css/base.css">
+{% endblock %}
+
+{% block body %}
+    <div class="game"><div class="table"></div></div>
+    {% include 'leaderboard.html' %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.js"></script>
+    <script type="module">
+        import { Game } from '/static/js/blackjack/index.js';
+        document.addEventListener('DOMContentLoaded', function() {
+           window.game = new Game();
+        });
+    </script>
+{% endblock %}
