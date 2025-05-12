@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 import logging
 from logging.handlers import RotatingFileHandler
 import os
+import sqlalchemy.exc
 
 # Initialize extensions
 db = SQLAlchemy()
@@ -19,6 +20,10 @@ def create_app(config_name='default'):
                 static_folder='static')
     app.config.from_object(config[config_name])
     
+    # Override with SQLite if running locally for first time
+    if 'mysql' in app.config['SQLALCHEMY_DATABASE_URI'] and not os.environ.get('DATABASE_URL'):
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blackjack.db'
+    
     # Initialize extensions with app
     db.init_app(app)
     socketio.init_app(app, cors_allowed_origins="*")
@@ -27,8 +32,8 @@ def create_app(config_name='default'):
     from blackjack.web import web as web_blueprint
     app.register_blueprint(web_blueprint)
     
-    from blackjack.api import api as api_blueprint
-    app.register_blueprint(api_blueprint, url_prefix='/api/v1')
+    from blackjack.api import api_bp
+    app.register_blueprint(api_bp, url_prefix='/api/v1')
     
     from blackjack.auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
@@ -82,7 +87,14 @@ def create_app(config_name='default'):
         return response
     
     # Create database tables
-    with app.app_context():
-        db.create_all()
+    try:
+        with app.app_context():
+            db.create_all()
+    except sqlalchemy.exc.DatabaseError as e:
+        app.logger.error(f"Database connection error: {e}")
+        print(f"WARNING: Could not connect to database. Using SQLite instead.")
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blackjack.db'
+        with app.app_context():
+            db.create_all()
         
     return app

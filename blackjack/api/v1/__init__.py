@@ -1,8 +1,8 @@
 from flask_restx import Api
-from blackjack.api import api as api_blueprint
+from blackjack.api import api_bp
 
 api = Api(
-    api_blueprint,
+    api_bp,
     version='1.0',
     title='Blackjack API',
     description='A RESTful API for Blackjack game',
