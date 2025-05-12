@@ -84,24 +84,29 @@ class TestBlackjackGame:
         assert game.players["player1"]["balance"] == 9500  # 10000 - 500
         assert game.players["player1"]["status"] == "playing"
         
+        # Create a new game for testing invalid scenarios
+        test_game = BlackjackGame("test")
+        test_game.add_player("player1", 1)
+        test_game.state = "betting"
+        
         # Test invalid bet amounts
-        success, error = game.place_bet("player1", 0)
+        success, error = test_game.place_bet("player1", 0)
         assert success is False
         assert "must be greater than zero" in error
         
-        success, error = game.place_bet("player1", 100000)
+        success, error = test_game.place_bet("player1", 100000)
         assert success is False
         assert "Insufficient balance" in error
         
         # Test placing a bet when game isn't in betting state
-        game.state = "playing"
-        success, error = game.place_bet("player1", 500)
+        test_game.state = "playing"
+        success, error = test_game.place_bet("player1", 500)
         assert success is False
         assert "not allowed at this time" in error
         
         # Test placing a bet for nonexistent player
-        game.state = "betting"
-        success, error = game.place_bet("nonexistent", 500)
+        test_game.state = "betting"
+        success, error = test_game.place_bet("nonexistent", 500)
         assert success is False
         assert "Player not in game" in error
 
