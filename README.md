@@ -1,6 +1,6 @@
 # Web Blackjack
 
-![Web Blackjack](https://www.blackjackgame.site/blackjack-preview.png)
+![Web Blackjack](https://www.blackjackgame.site/static/blackjack-preview.png)
 
 A modern, multiplayer online blackjack game where you can play with friends or other players from around the world. Built with Flask and Socket.IO for real-time gameplay.
 
