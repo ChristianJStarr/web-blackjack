@@ -1,0 +1,45 @@
+# Git files
+.git/
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+LICENSE
+*.md
+
+# Development files
+.vscode/
+.idea/
+*.pyc
+__pycache__/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.production
+
+# Tests
+tests/
+
+# Build artifacts
+*.egg-info/
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Instance and logs
+instance/
+logs/
+
+# Docker files (they're already in the container)
+Dockerfile
+docker-compose.yml
+captain-definition 

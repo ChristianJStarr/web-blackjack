@@ -77,4 +77,9 @@ def privacy():
 @web.route('/terms')
 def terms():
     """Terms of service page"""
-    return render_template('terms.html') 
+    return render_template('terms.html')
+
+@web.route('/health')
+def health():
+    """Health check endpoint for Docker and load balancers"""
+    return jsonify({'status': 'healthy', 'service': 'blackjack'}), 200
